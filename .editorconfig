@@ -1,0 +1,26 @@
+# EditorConfig http://editorconfig.org/ for NEAT
+
+root = true
+
+# Global unix line-endings and ending newline
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# Set filetype default charset
+[*.{py}]
+charset = utf-8
+
+# Python configuration
+[*.py]
+indent_style = space
+indent_size = 4
+
+# Windows batch file configuration
+[{*.bat}]
+end_of_line = crlf
+
+# Travis configuration
+[{.travis.yml}]
+indent_style = space
+indent_size = 2

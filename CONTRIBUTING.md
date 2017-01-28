@@ -20,13 +20,15 @@ The in-house development period is to follow the 0.x.x standard until the initia
 
 ### Coding Conventions
 
-NEAT source follows the [PEP8 - Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/).
+NEAT source follows the [PEP8 - Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/) the more recently named [pycodestyle](https://pypi.python.org/pypi/pycodestyle).
 The only exception to this style guide is the rule on [line length](https://www.python.org/dev/peps/pep-0008/#maximum-line-length).
 This rule has been omitted simply because of its occasional annoyance.
 Code written in in this project should still try to adhere to the 79 character limit while documentation should stay under the 72 character limit.
 
 You can disable the checking of line length by passing the error code `E501` as a value into the ignore list of `pep8`.
 For example, `pep8 --ignore=E501 ./`.
+
+We **highly** recommend you install a linter plugin for you editor that follows the pycodestyle (pep8) format.
 
 
 ### Documentation Conventions
@@ -45,7 +47,7 @@ In addition, Python source files identify themselves using the following header.
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
 
 """
-{{filename_without_extension}}
+{{filename}}
 .. module:: neat
     :platform: Linux, MacOS, Win32
     :synopsis:
@@ -58,8 +60,8 @@ In addition, Python source files identify themselves using the following header.
 _Where the following apply:_
 
 <dl>
-  <dt><code>{{filename_without_extension}}</code></dt>
-  <dd>The current file's name disregarding any extensions (e.g. `__init__.py` would become `__init__`)</dd>
+  <dt><code>{{filename}}</code></dt>
+  <dd>The current file's name</dd>
   <dt><code>{{created_time}}</code></dt>
   <dd>The timestamp at which the file was created, following the <a href="https://momentjs.com/">Moment.js</a> format <code>MM-DD-YYYY HH:mm:ss</code></dd>
   <dt><code>{{last_modified_time}}</code></dt>
@@ -81,7 +83,54 @@ However, tests are executed via the [nose](https://nose.readthedocs.io/en/latest
 
 ## Setup
 
+Below is several sub-sections which talk about how to get started contributing to NEAT's development.
+
 <!-- This section of the contributing document is continually subject to change -->
+
+### Installing Dependencies
+
+NEAT depends on several packages provided by [PyPi](https://pypi.python.org/pypi) which need to be installed for NEAT to function correctly.
+These should be installed into a virtual Python environment by using the `virtualenv` package.
+To set this up, first install the `virtualenv` and `virtualenvwrapper` packages via pip.
+
+`pip install virtualenv virtualenvwrapper`
+
+**Note**, if working on Windows, it may be necessary to install the `virtualenvwrapper-win` module as well.
+This simply takes the functionality of `virtualenvwrapper` and translates it to batch scripts which Windows systems can run.
+
+After installing these packages you should now have access to several scripts such as `mkvirtualenv`, `workon`, `rmvirtualenv`, and [others](https://virtualenvwrapper.readthedocs.io/en/latest/command_ref.html).
+However, it may also be necessary to set a environmental variable to tell the installed scripts where to setup all virtual environments.
+This is typically done under the `WORKON_HOME` variable.
+
+`export WORKON_HOME=~/.virtualenvs/`
+
+This indicates that all virtual environments will be built and stored under the directory `~/.virtualenvs/`
+
+NEAT is built and developed using Python 3, so it may be necessary to specify the version of Python to use when creating a virtual environment.
+
+`mkvirtualenv --python=/usr/bin/python3 neat`
+
+This will create and place your current shell into the context of a new virtual environment **neat** (if it doesn't exist already).
+Note, most modern shells show an indication of what virtual environment you are currently located in. For example, a common shell prompt...
+
+`/home/r/Documents/Github/neat $`
+
+may be transformed to something resembling...
+
+`(neat) /home/r/Documents/Github/neat $`
+
+Once inside of this virtual environment it is possible to install dependencies.
+All of NEATs dependencies are specified in the `requirements.txt` file located in the root of the repository.
+This file follows pip's [requirements file format](https://pip.pypa.io/en/stable/reference/pip_install/#requirements-file-format).
+The dependencies listed in this file can be automatically installed using the virtual environment's pip script by passing the path to the requirements file after giving pip the `-r` flag.
+
+`pip install -r ./requirements.txt`
+
+If the pip installation goes successfully, then all listed requirements should be successfully installed to the virtual environment.
+
+To get out of the virtual environment, simply use the `deactivate` command (only available inside of a virtual environment).
+To re-enter a virtual environment, use the `workon neat` command, where _neat_ is the name of the virtual environment you created.
+
 
 ### Building Documentation
 
@@ -96,3 +145,20 @@ _This dependency is also already listed in the project's `requirements.txt`._
 After you have the Sphinx toolkit, documentation can be built by executing the `make html` command within the documentation directory (docs).
 However, changes outside of `autodoc`, which manages in-code docstrings, need to be written in [reStructuredText](http://www.sphinx-doc.org/en/stable/rest.html) and pointed to by the `index.rst`.
 For more information, simply go through Sphinx's [First Steps with Sphinx](http://www.sphinx-doc.org/en/stable/tutorial.html).
+
+
+### Writing Tests
+
+We test all code using [nose](https://nose.readthedocs.io/en/latest/) but write all tests using the standard [unittest](https://docs.python.org/3/library/unittest.html) module included in Python.
+We have given an example for how to write test cases in `nose/tests/_example.py`.
+Please follow the standard of keeping multiple related test cases within the same source file.
+
+
+### Running Tests
+
+Tests can be run using the `nosetests` command (once the dependency has be installed).
+NEAT also depends on the `coverage` module, and can report code test coverage through executing the `nosetests --with-coverage` command.
+
+We use a continuous integration system, [TravisCI](https://travis-ci.org/), to continually check test cases on public pushes to the GitHub repository.
+We also utilize [codecov](https://codecov.io/gh), which presents code coverage as reported by TravisCI after each public push.
+The configuration for continuous integration can be found in the standard `.travis.yml` file, found in the root of the repository.

@@ -53,7 +53,7 @@ The following people are _listed_ contributors of this project.
 - Sierra Milosh <[]()> ([](mailto:))
 - Stephen Bunn <[ritashugisha](https://github.com/ritashugisha)> ([ritashugisha@gmail.com](mailto:ritashugisha@gmail.com))
 - Nathan Davis <[]()> ([](mailto:))
-- James Ward <[]()> ([](mailto:))
+- James Ward <[thehunte199](https://github.com/thehunte199)> ([](mailto:))
 
  
 
