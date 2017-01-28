@@ -14,3 +14,7 @@ script:
   - nosetests --with-coverage
 after_success:
   - codecov
+notifications:
+  email:
+    on_success: never
+    on_filaure: always
