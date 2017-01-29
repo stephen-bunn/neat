@@ -8,7 +8,7 @@ _Appstate's networked energy appliance translator (NEAT)._
 
 
 
-[Appalachian State University](http://www.appstate.edu/) as of 2016 is considered by [aashe](http://www.aashe.org/) to have the best sustainable campus out of their selection pool.[^1]
+[Appalachian State University](http://www.appstate.edu/) as of 2016 is considered by [AASHE](http://www.aashe.org/) to have the best sustainable campus out of their selection pool.[^1]
 In order to achieve this, Appstate has had to mount renewable energy appliances (along with sensors) across their campus in order to ensure their devices are functioning optimally.
 Along with this, several machines have been set up to continually pipe the sensory information provided by these devices to a simple file server.
 Because these devices come from different vendors and from various time periods, it becomes increasingly difficult to store the **actually useful** sensory information provided by these devices as more and more of them are added to the network.
@@ -50,10 +50,10 @@ The following people are _listed_ contributors of this project.
 
 <!-- A note to editors of this list, please keep to the list format as much as possible -->
 
-- Sierra Milosh <[]()> ([](mailto:))
+- Sierra Milosh <[SierraMilosh](https://github.com/SierraMilosh)> ([miloshsr1@appstate.edu](mailto:miloshsr1@appstate.edu))
 - Stephen Bunn <[ritashugisha](https://github.com/ritashugisha)> ([ritashugisha@gmail.com](mailto:ritashugisha@gmail.com))
-- Nathan Davis <[]()> ([](mailto:))
-- James Ward <[thehunte199](https://github.com/thehunte199)> ([](mailto:))
+- Nathan Davis <[Kanthalon](https://github.com/Kanthalon)> ([davisna1@appstate.edu](mailto:davisna1@appstate.edu))
+- James Ward <[thehunte199](https://github.com/thehunte199)> ([wardja2@appstate.edu](mailto:wardja2@appstate.edu))
 
  
 
