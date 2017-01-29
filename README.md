@@ -40,7 +40,7 @@ For our documentation purposes, we have decided to utilize both the GitHub repos
 
 ### Development
 
-For an overview of development standards to adhere to, please thoroughly read through our [CONTRIBUTING.md](./CONTRIBUTING.md).
+For an overview of development standards to adhere to, please thoroughly read through our [CONTRIBUTING.md](./.github/CONTRIBUTING.md).
 
 
 ### Contributors
