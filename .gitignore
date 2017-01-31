@@ -91,3 +91,4 @@ ENV/
 # NEAT project settings
 log/
 main.py
+.DS_Store
