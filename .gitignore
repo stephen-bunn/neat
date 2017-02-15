@@ -89,6 +89,6 @@ ENV/
 .ropeproject
 
 # NEAT project settings
-log/
+logs/
 main.py
 .DS_Store
