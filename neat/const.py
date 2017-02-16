@@ -128,6 +128,13 @@ class _const(object):
         return os.path.dirname(self.base_dir)
 
     @property
+    def schema_dir(self) -> str:
+        """ The directory schemas live in.
+        """
+
+        return os.path.join(self.base_dir, 'schemas')
+
+    @property
     def log_dir(self) -> str:
         """ The logging directroy which should be used.
         """
