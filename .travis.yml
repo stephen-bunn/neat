@@ -1,9 +1,7 @@
 sudo: false
 language: python
-# coverage is broken for 2.x-3.2
+# coverage is broken for 2.x-3.2, typing only supported in 3.5+
 python:
-  - 3.3
-  - 3.4
   - 3.5
   - 3.6
 install:
