@@ -15,3 +15,4 @@ __init__.py
 """
 
 from ._example import *
+from .requester import *

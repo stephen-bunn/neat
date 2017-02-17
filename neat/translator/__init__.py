@@ -9,8 +9,8 @@ __init__.py
 .. module:: neat
     :platform: Linux, MacOSX, Win32
     :synopsis:
-    :created: 02-16-2017 15:57:17
-    :modified: 02-16-2017 15:57:17
+    :created: 02-16-2017 15:16:19
+    :modified: 02-16-2017 15:16:19
 .. moduleauthor:: Stephen Bunn <r>
 """
 

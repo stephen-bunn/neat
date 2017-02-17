@@ -9,11 +9,11 @@ __init__.py
 .. module:: neat
     :platform: Linux, MacOSX, Win32
     :synopsis:
-    :created: 02-16-2017 15:57:17
-    :modified: 02-16-2017 15:57:17
+    :created: 02-15-2017 18:55:23
+    :modified: 02-15-2017 18:55:23
 .. moduleauthor:: Stephen Bunn <r>
 """
 
 from . import (
-    obvious
+    device
 )

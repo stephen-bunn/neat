@@ -64,7 +64,7 @@ class _const(object):
         self._log_level = logging.DEBUG
         self._log_format = (
             '%(asctime)s - %(levelname)s - '
-            '%(filename)s:%(lineno)s;%(funcName)s '
+            '%(filename)s:%(lineno)s<%(funcName)s> '
             '%(message)s'
         )
         self._log_handlers = []
