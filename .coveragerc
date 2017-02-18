@@ -2,3 +2,7 @@
 branch=True
 include=
   neat/*
+
+[report]
+omit=
+  */_common.py
