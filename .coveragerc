@@ -4,5 +4,6 @@ include=
   neat/*
 
 [report]
+show_missing=True
 omit=
   */_common.py

@@ -61,7 +61,7 @@ class ObviousRequesterTest(unittest.TestCase):
     def test_signal(self):
         self.assertIsInstance(self._req.signal, blinker.Signal)
 
-    def test_request(self):
+    def test_request_receive(self):
         that = self
 
         @self._req.signal.connect
