@@ -38,6 +38,9 @@ class ObviousTranslator(AbstractTranslator):
         for r in self._requesters:
             r.signal.connect(self.translate)
 
-    def translate(self, content: str) -> dict:
+    def translate(self, requester: ObviousRequester, data: str) -> dict:
         # TODO: translate content
-        pass
+        const.log.debug((
+            'received signal from `{requester.signal_name}` ...'
+        ).format(requester=requester))
+        print(requester, data)

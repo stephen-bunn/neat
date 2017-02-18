@@ -65,7 +65,8 @@ class ObviousRequesterTest(unittest.TestCase):
         that = self
 
         @self._req.signal.connect
-        def _receiver(data):
+        def _receiver(requester, data):
+            that.assertIsInstance(requester, ObviousRequester)
             that.assertEqual(data, 'data')
 
         with requests_mock.mock() as mock:

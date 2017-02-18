@@ -53,6 +53,9 @@ class ObviousRequester(AbstractRequester):
         return blinker.signal(self.signal_name)
 
     def request(self):
+        const.log.debug((
+            'requesting content at `{request_url}` ...'
+        ).format(request_url=self._request_template.format(self=self)))
         requests.get(
             self._request_template.format(self=self),
             hooks=dict(response=self.receive)
@@ -60,4 +63,12 @@ class ObviousRequester(AbstractRequester):
 
     def receive(self, resp: requests.Response, *args, **kwargs):
         if resp.status_code == 200:
-            self.signal.send(resp.text)
+            const.log.debug((
+                'received response from `{resp.url}` ...'
+            ).format(resp=resp))
+            self.signal.send(self, data=resp.text)
+        else:
+            const.log.error((
+                'received invalid response from `{resp.url}` '
+                '({resp.status_code}) ...'
+            ).format(resp=resp))
