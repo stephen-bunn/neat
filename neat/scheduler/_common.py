@@ -23,23 +23,42 @@ from ..requester._common import AbstractRequester
 
 
 class AbstractScheduler(multiprocessing.Process):
+    """ The abstract scheduler which all schedulers much extend.
+    """
     __metaclass__ = abc.ABCMeta
 
     def __init__(self):
+        """ The abstract scheduler initializer.
+
+        ..note: Required that all subclasses super initialization
+        """
+
         super().__init__()
 
     @abc.abstractproperty
     def signal_name(self) -> str:
+        """ The unique signal name of the scheduler.
+        """
+
         raise NotImplementedError()
 
     @abc.abstractproperty
     def signal(self) -> blinker.Signal:
+        """ The unique signal of the scheduler.
+        """
+
         raise NotImplementedError()
 
     @abc.abstractproperty
     def requester(self) -> AbstractRequester:
+        """ The requester object to schedule.
+        """
+
         raise NotImplementedError()
 
     @abc.abstractmethod
     def run(self) -> None:
+        """ The infinite method to start sending signals on scheduled delays.
+        """
+
         raise NotImplementedError()
