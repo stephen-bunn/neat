@@ -9,10 +9,10 @@ __init__.py
 .. module:: neat
     :platform: Linux, MacOSX, Win32
     :synopsis:
-    :created: 02-16-2017 15:57:17
-    :modified: 02-16-2017 15:57:17
+    :created: 02-21-2017 18:57:34
+    :modified: 02-21-2017 18:57:34
 .. moduleauthor:: Stephen Bunn <r>
 """
 
 from . import _common
-from .obvious import ObviousRequester
+from .obvious import ObviousScheduler

@@ -14,6 +14,5 @@ __init__.py
 .. moduleauthor:: Stephen Bunn <r>
 """
 
-from . import (
-    obvious
-)
+from . import _common
+from .obvious import ObviousTranslator
