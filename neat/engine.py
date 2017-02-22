@@ -48,16 +48,16 @@ class Engine(object):
             ))
         self._schedulers = schedulers
 
-    def on_scheduled(self, scheduler: AbstractScheduler):
+    def on_scheduled(self, scheduler: AbstractScheduler) -> None:
         print(scheduler)
         # scheduler.requester.request()
 
-    def on_data(self, data):
+    def on_data(self, data: str) -> None:
         # TODO: pass the information into the translator
         # then to the transaction
-        pass
+        print(data)
 
-    def start(self):
+    def start(self) -> None:
         for scheduler in self.schedulers:
             scheduler.signal.connect(self.on_scheduled)
             scheduler.requester.signal.connect(self.on_data)
