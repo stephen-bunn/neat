@@ -21,6 +21,11 @@ import blinker
 
 from . import const
 from .scheduler._common import AbstractScheduler
+from .requester._common import AbstractRequester
+from .translator import get_translator
+
+# XXX: remove import
+import requests_mock
 
 
 class Engine(object):
@@ -53,12 +58,13 @@ class Engine(object):
             'scheduled request from scheduler signal '
             '`{scheduler.signal_name}` ...'
         ).format(scheduler=scheduler))
-        # scheduler.requester.request()
+        scheduler.requester.request()
 
-    def on_data(self, data: str) -> None:
+    def on_data(self, requester: AbstractRequester, data: str) -> None:
         # TODO: pass the information into the translator
         # then to the transaction
-        print(data)
+        # FIXME: The following needs to be a generic call and interpret
+        print(get_translator(requester).translate(data))
 
     def start(self) -> None:
         for scheduler in self.schedulers:

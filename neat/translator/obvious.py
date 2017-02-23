@@ -14,33 +14,18 @@ obvious.py
 .. moduleauthor:: Stephen Bunn <r>
 """
 
+import xml.etree.ElementTree
 from typing import List
 
 from .. import const
 from ._common import AbstractTranslator
-from ..requester.obvious import ObviousRequester
-
-import blinker
 
 
 class ObviousTranslator(AbstractTranslator):
 
-    def __init__(self, requesters: List[ObviousRequester]):
-        self.requesters = requesters
-
-    @property
-    def requesters(self) -> List[ObviousRequester]:
-        return self._requesters
-
-    @requesters.setter
-    def requesters(self, requesters: List[ObviousRequester]):
-        self._requesters = requesters
-        for r in self._requesters:
-            r.signal.connect(self.translate)
-
-    def translate(self, requester: ObviousRequester, data: str) -> dict:
+    @staticmethod
+    def translate(data: str) -> dict:
         # TODO: translate content
-        const.log.debug((
-            'received signal from `{requester.signal_name}` ...'
-        ).format(requester=requester))
-        print(requester, data)
+        print(data)
+        # etree = xml.etree.ElementTree.fromstring(data)
+        # print(etree)
