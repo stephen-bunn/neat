@@ -19,8 +19,9 @@ import multiprocessing
 
 import blinker
 
-from ._common import AbstractScheduler
+from .. import const
 from ..requester import ObviousRequester
+from ._common import AbstractScheduler
 
 
 class ObviousScheduler(AbstractScheduler):

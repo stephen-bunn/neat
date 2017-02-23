@@ -36,6 +36,7 @@ class _const(object):
 
     __allowed_setters = (
         'log_dir', 'log_exceptions', 'log_level', 'log_format',
+        '_log_dir', '_log_exceptions', '_log_level', '_log_format',
     )
 
     class ModuleConstantException(Exception):

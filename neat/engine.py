@@ -49,7 +49,10 @@ class Engine(object):
         self._schedulers = schedulers
 
     def on_scheduled(self, scheduler: AbstractScheduler) -> None:
-        print(scheduler)
+        const.log.debug((
+            'scheduled request from scheduler signal '
+            '`{scheduler.signal_name}` ...'
+        ).format(scheduler=scheduler))
         # scheduler.requester.request()
 
     def on_data(self, data: str) -> None:
@@ -64,7 +67,7 @@ class Engine(object):
             scheduler.daemon = True
             scheduler.start()
 
-            const.log.debug((
+            const.log.info((
                 'starting scheduler `{scheduler.name}` signal '
                 '`{scheduler.signal_name}` as daemon with pid '
                 '`{scheduler.pid}` ...'
