@@ -16,3 +16,12 @@ __init__.py
 
 from . import _common
 from .obvious import ObviousTranslator
+
+
+TRANSLATOR_MAP = {
+    'ObviousRequester': ObviousTranslator
+}
+
+
+def get_translator(requester):
+    return TRANSLATOR_MAP[requester.__class__.__name__]
