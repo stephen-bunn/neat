@@ -29,11 +29,6 @@ class ObviousRequester(AbstractRequester):
         '{self.__class__.__name__}_{self._obvious_ip}:{self._obvious_port}_'
         '{self._device_id}'
     )
-    _request_template = (
-        'http://{self._obvious_user}:{self._obvious_pass}'
-        '@{self._obvious_ip}:{self._obvious_port}'
-        '/setup/devicexml.cgi?ADDRESS={self._device_id}&TYPE=DATA'
-    )
 
     def __init__(
         self, device_id: int, obvious_ip: str,
@@ -83,10 +78,15 @@ class ObviousRequester(AbstractRequester):
         """
 
         const.log.debug((
-            'requesting content at `{request_url}` ...'
-        ).format(request_url=self._request_template.format(self=self)))
-        requests.get(
-            self._request_template.format(self=self),
+            'requesting device `{self._device_id}` content from '
+            '`{self._obvious_ip}` ...'
+        ).format(self=self))
+        requests.get((
+            'http://{self._obvious_ip}:{self._obvious_port}'
+            '/setup/devicexml.cgi'
+        ).format(self=self),
+            auth=(self._obvious_user, self._obvious_pass),
+            params={'ADDRESS': self._device_id, 'TYPE': 'DATA'},
             hooks=dict(response=self.receive)
         )
 
