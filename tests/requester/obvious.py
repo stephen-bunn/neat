@@ -29,6 +29,10 @@ class ObviousRequesterTest(unittest.TestCase):
 
     def setUp(self):
         self._req = ObviousRequester(1, '127.0.0.1', 'user', 'pass')
+        self._req_url = (
+            'http://{req._obvious_ip}:{req._obvious_port}'
+            '{req._request_endpoint}?ADDRESS={req._device_id}&TYPE=DATA'
+        ).format(req=self._req)
 
     def tearDown(self):
         del self._req
@@ -71,7 +75,7 @@ class ObviousRequesterTest(unittest.TestCase):
 
         with requests_mock.mock() as mock:
             mock.get(
-                self._req._request_template.format(self=self._req),
+                self._req_url,
                 text='data'
             )
             self.assertIsNone(self._req.request())

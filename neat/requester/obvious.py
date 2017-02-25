@@ -16,6 +16,7 @@ obvious.py
 
 import blinker
 import requests
+import urllib
 
 from .. import const
 from ._common import AbstractRequester
@@ -29,6 +30,7 @@ class ObviousRequester(AbstractRequester):
         '{self.__class__.__name__}_{self._obvious_ip}:{self._obvious_port}_'
         '{self._device_id}'
     )
+    _request_endpoint = '/setup/devicexml.cgi'
 
     def __init__(
         self, device_id: int, obvious_ip: str,
@@ -81,10 +83,13 @@ class ObviousRequester(AbstractRequester):
             'requesting device `{self._device_id}` content from '
             '`{self._obvious_ip}` ...'
         ).format(self=self))
-        requests.get((
-            'http://{self._obvious_ip}:{self._obvious_port}'
-            '/setup/devicexml.cgi'
-        ).format(self=self),
+        requests.get(
+            urllib.parse.urljoin(
+                (
+                    'http://{self._obvious_ip}:{self._obvious_port}'
+                ).format(self=self),
+                self._request_endpoint
+            ),
             auth=(self._obvious_user, self._obvious_pass),
             params={'ADDRESS': self._device_id, 'TYPE': 'DATA'},
             hooks=dict(response=self.receive)
