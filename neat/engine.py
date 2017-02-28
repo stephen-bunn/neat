@@ -64,9 +64,14 @@ class Engine(object):
         # TODO: pass the information into the translator
         # then to the transaction
         # FIXME: The following needs to be a generic call and interpret
-        print(get_translator(requester).translate(data))
+        print(get_translator(requester)().translate(data))
 
     def start(self) -> None:
+        const.log.info((
+            'starting engine with `{self._cpu_count}` cpus for '
+            '`{scheulers}` scheulers ...'
+        ).format(self=self, scheulers=len(self.schedulers)))
+
         for scheduler in self.schedulers:
             scheduler.signal.connect(self.on_scheduled)
             scheduler.requester.signal.connect(self.on_data)

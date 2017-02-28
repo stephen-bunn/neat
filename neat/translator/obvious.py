@@ -14,18 +14,46 @@ obvious.py
 .. moduleauthor:: Stephen Bunn <r>
 """
 
-import xml.etree.ElementTree
-from typing import List
+import importlib
 
 from .. import const
 from ._common import AbstractTranslator
 
+import bs4
+import pint
+import dateutil.parser
+
 
 class ObviousTranslator(AbstractTranslator):
+    _parser_pref = ['lxml', 'html.parser']
 
-    @staticmethod
-    def translate(data: str) -> dict:
-        # TODO: translate content
-        print(data)
-        # etree = xml.etree.ElementTree.fromstring(data)
-        # print(etree)
+    def __init__(self, **kwargs: dict) -> None:
+        self._meta = kwargs
+        self._unit_reg = pint.UnitRegistry()
+        self._unit_map = {
+
+        }
+
+    @property
+    def parser(self) -> str:
+        if not hasattr(self, '_parser') or \
+                self._parser not in self._parser_pref:
+            for parser in self._parser_pref:
+                if importlib.util.find_spec(parser):
+                    self._parser = parser
+                    break
+        return self._parser
+
+    @property
+    def unit_map(self) -> dict:
+        pass
+
+    def translate(self, data: str) -> dict:
+        soup = bs4.BeautifulSoup(data, self.parser)
+        for device in soup.find_all('devices'):
+            name = device.find('name').text
+            for record in device.find_all('record'):
+                rec_timestamp = dateutil.parser.parse(record.find('time').text)
+                rec_error = record.find('error').text
+                for point in record.find_all('point'):
+                    print(point.attrs)
