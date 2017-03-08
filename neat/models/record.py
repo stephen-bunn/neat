@@ -143,7 +143,7 @@ class Record(object):
             'device_type': self.device_type,
             'timestamp': self.timestamp,
             'data': [point.to_json() for point in self.data],
-            'parsed': [point.to_json() for point self.parsed],
+            'parsed': [point.to_json() for point in self.parsed],
             'coord': {
                 'long': self.longitude,
                 'lat': self.latitude

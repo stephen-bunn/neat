@@ -42,25 +42,19 @@ class ObviousRequesterTest(unittest.TestCase):
             ObviousRequester()
 
         req = ObviousRequester(None, None, None, None)
-        self.assertIsNone(req.device_id)
+        self.assertIsNone(req._device_id)
         self.assertIsNone(req._obvious_ip)
         self.assertIsNone(req._obvious_user)
         self.assertIsNone(req._obvious_pass)
         self.assertEqual(req._obvious_port, 80)
 
         req = ObviousRequester(1, '127.0.0.1', 'user', 'pass', 93)
-        self.assertEqual(req.device_id, 1)
+        self.assertEqual(req._device_id, 1)
         self.assertEqual(req._obvious_ip, '127.0.0.1')
         self.assertEqual(req._obvious_user, 'user')
         self.assertEqual(req._obvious_pass, 'pass')
         self.assertEqual(req._obvious_port, 93)
         del req
-
-    def test_signal_name(self):
-        self.assertEqual(
-            self._req.signal_name,
-            'ObviousRequester_127.0.0.1:80_1'
-        )
 
     def test_signal(self):
         self.assertIsInstance(self._req.signal, blinker.Signal)
