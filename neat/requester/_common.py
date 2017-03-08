@@ -24,19 +24,14 @@ class AbstractRequester(object):
     """
     __metaclass__ = abc.ABCMeta
 
-    @abc.abstractproperty
-    def signal_name(self) -> str:
-        """ The unique signal name for the requseter.
-        """
-
-        raise NotImplementedError()
-
-    @abc.abstractproperty
+    @property
     def signal(self) -> blinker.Signal:
-        """ The unique signal for the requseter.
+        """ The unique signal for the requester when complete.
         """
 
-        raise NotImplementedError()
+        if not hasattr(self, '_signal') or not self._signal:
+            self._signal = blinker.Signal()
+        return self._signal
 
     @abc.abstractmethod
     def request(self) -> None:

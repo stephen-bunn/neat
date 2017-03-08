@@ -26,15 +26,12 @@ class ObviousRequester(AbstractRequester):
     """ The requester for the Obvious server.
     """
 
-    _signal_template = (
-        '{self.__class__.__name__}_{self._obvious_ip}:{self._obvious_port}_'
-        '{self._device_id}'
-    )
     _request_endpoint = '/setup/devicexml.cgi'
 
     def __init__(
         self, device_id: int, obvious_ip: str,
-        obvious_user: str, obvious_pass: str, obvious_port: int=80
+        obvious_user: str, obvious_pass: str, obvious_port: int=80,
+        timeout: int=10
     ):
         """ The Obvious requester initializer.
 
@@ -48,55 +45,44 @@ class ObviousRequester(AbstractRequester):
         :type obvious_pass: str
         :param obvious_port: The port of the Obvious server (80)
         :type obvious_port: int
+        :param timeout: The request timeout period (10 seconds)
+        :type timeout: int
         """
 
         self._device_id = device_id
+        self._timeout = timeout
         (self._obvious_ip, self._obvious_port) = (obvious_ip, obvious_port)
         (self._obvious_user, self._obvious_pass) = (obvious_user, obvious_pass)
-
-    @property
-    def device_id(self) -> int:
-        """ The id of the Obvious device for the requester.
-        """
-
-        return self._device_id
-
-    @property
-    def signal_name(self) -> str:
-        """ The signal name of the Obvious requester.
-        """
-
-        return self._signal_template.format(self=self)
-
-    @property
-    def signal(self) -> blinker.Signal:
-        """ The signal of the Obvious requester.
-        """
-
-        return blinker.signal(self.signal_name)
 
     def request(self) -> None:
         """ Request information from the Obvious.
         """
 
         const.log.debug((
-            'requesting device `{self._device_id}` content from '
+            'requesting device `{self._device_id}` status from '
             '`{self._obvious_ip}` ...'
         ).format(self=self))
-        requests.get(
-            urllib.parse.urljoin(
-                (
-                    'http://{self._obvious_ip}:{self._obvious_port}'
-                ).format(self=self),
-                self._request_endpoint
-            ),
-            auth=(self._obvious_user, self._obvious_pass),
-            params={'ADDRESS': self._device_id, 'TYPE': 'DATA'},
-            hooks=dict(response=self.receive)
-        )
+        try:
+            requests.get(
+                urllib.parse.urljoin(
+                    (
+                        'http://{self._obvious_ip}:{self._obvious_port}'
+                    ).format(self=self),
+                    self._request_endpoint
+                ),
+                auth=(self._obvious_user, self._obvious_pass),
+                params={'ADDRESS': self._device_id, 'TYPE': 'DATA'},
+                hooks=dict(response=self.receive),
+                timeout=self._timeout
+            )
+        except requests.exceptions.ConnectTimeout as exc:
+            const.log.error((
+                'connection timeout occured after `{self._timeout}` seconds '
+                'for device `{self._device_id}` at `{self._obvious_ip}` ...'
+            ).format(self=self))
 
     def receive(self, resp: requests.Response, *args, **kwargs) -> None:
-        """ The reciever of information from the requester.
+        """ The receiver of information from the requester.
 
         :param resp: The response of the request
         :type resp: requests.Response

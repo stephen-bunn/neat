@@ -21,5 +21,9 @@ class AbstractTranslator(object):
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
+    def validate(self, content: str) -> bool:
+        raise NotImplementedError()
+
+    @abc.abstractmethod
     def translate(self, content: str) -> dict:
         raise NotImplementedError()

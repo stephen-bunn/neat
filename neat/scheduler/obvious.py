@@ -28,10 +28,6 @@ class ObviousScheduler(AbstractScheduler):
     """ The scheduler for Obvious requesters.
     """
 
-    _signal_template = (
-        '{self.__class__.__name__}_{self.delay}({self._requester.signal_name})'
-    )
-
     def __init__(self, requester: ObviousRequester, delay: float=1.0):
         """ The Obvious scheduler initializer.
 
@@ -44,20 +40,6 @@ class ObviousScheduler(AbstractScheduler):
         super().__init__()
         self._requester = requester
         self.delay = delay
-
-    @property
-    def signal_name(self) -> str:
-        """ The signal name of the Obvious scheduler (extends requester's).
-        """
-
-        return self._signal_template.format(self=self)
-
-    @property
-    def signal(self) -> blinker.Signal:
-        """ The signal of the Obvious scheduler.
-        """
-
-        return blinker.signal(self.signal_name)
 
     @property
     def requester(self) -> ObviousRequester:
@@ -80,7 +62,7 @@ class ObviousScheduler(AbstractScheduler):
         :param delay: The new delay of the scheduler
         :type delay: float
         """
-        self._delay = delay
+        self._delay = float(delay)
 
     def run(self):
         """ Starts the infinite loop for signaling scheduled requests.

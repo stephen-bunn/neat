@@ -16,6 +16,7 @@ const.py
 
 import os
 import sys
+import json
 import logging
 import logging.handlers
 import datetime
@@ -134,6 +135,16 @@ class _const(object):
         """
 
         return os.path.join(self.base_dir, 'schemas')
+
+    @property
+    def record_schema(self) -> dict:
+        """ The dictionary schema for valid records.
+        """
+
+        if not hasattr(self, '_record_schema'):
+            with open(os.path.join(self.schema_dir, 'record.json'), 'r') as fp:
+                self._record_schema = json.load(fp)
+        return self._record_schema
 
     @property
     def log_dir(self) -> str:

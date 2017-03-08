@@ -18,14 +18,13 @@ import multiprocessing
 from typing import List
 
 import blinker
+import jsonschema
 
 from . import const
 from .scheduler._common import AbstractScheduler
 from .requester._common import AbstractRequester
+from .translator._common import AbstractTranslator
 from .translator import get_translator
-
-# XXX: remove import
-import requests_mock
 
 
 class Engine(object):
@@ -40,6 +39,7 @@ class Engine(object):
             cpu_count
         )
         self.schedulers = schedulers
+        self._translators = {}
 
     @property
     def schedulers(self) -> List[AbstractScheduler]:
@@ -53,18 +53,31 @@ class Engine(object):
             ))
         self._schedulers = schedulers
 
+    @property
+    def translators(self) -> List[AbstractTranslator]:
+        return self._translators
+
     def on_scheduled(self, scheduler: AbstractScheduler) -> None:
         const.log.debug((
-            'scheduled request from scheduler signal '
-            '`{scheduler.signal_name}` ...'
+            'scheduled request from scheduler `{scheduler}` ...'
         ).format(scheduler=scheduler))
         scheduler.requester.request()
 
     def on_data(self, requester: AbstractRequester, data: str) -> None:
-        # TODO: pass the information into the translator
-        # then to the transaction
-        # FIXME: The following needs to be a generic call and interpret
-        print(get_translator(requester)().translate(data))
+        if requester.__class__.__name__ not in self.translators:
+            self._translators[requester.__class__.__name__] = \
+                get_translator(requester)()
+        translator = self.translators[requester.__class__.__name__]
+        if translator.validate(data):
+            record = translator.translate(data)
+            try:
+                jsonschema.validate(record, const.record_schema)
+                # TODO: do something
+            except jsonschema.exceptions.ValidationError as exc:
+                const.log.error((
+                    'invalid record format built by `{translator}` ...'
+                ).format(translator=translator))
+                const.log.exception(exc)
 
     def start(self) -> None:
         const.log.info((
@@ -79,9 +92,8 @@ class Engine(object):
             scheduler.start()
 
             const.log.info((
-                'starting scheduler `{scheduler.name}` signal '
-                '`{scheduler.signal_name}` as daemon with pid '
-                '`{scheduler.pid}` ...'
+                'starting scheduler `{scheduler}` signal as daemon '
+                'with pid `{scheduler.pid}` ...'
             ).format(scheduler=scheduler))
 
         for _ in self.schedulers:

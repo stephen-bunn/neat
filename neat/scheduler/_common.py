@@ -35,19 +35,14 @@ class AbstractScheduler(multiprocessing.Process):
 
         super().__init__()
 
-    @abc.abstractproperty
-    def signal_name(self) -> str:
-        """ The unique signal name of the scheduler.
-        """
-
-        raise NotImplementedError()
-
-    @abc.abstractproperty
+    @property
     def signal(self) -> blinker.Signal:
         """ The unique signal of the scheduler.
         """
 
-        raise NotImplementedError()
+        if not hasattr(self, '_signal') or not self._signal:
+            self._signal = blinker.Signal()
+        return self._signal
 
     @abc.abstractproperty
     def requester(self) -> AbstractRequester:
