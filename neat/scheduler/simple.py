@@ -15,38 +15,24 @@ obvious.py
 """
 
 import time
-import multiprocessing
-
-import blinker
 
 from .. import const
-from ..requester import ObviousRequester
 from ._common import AbstractScheduler
 
 
-class ObviousScheduler(AbstractScheduler):
+class SimpleDelayScheduler(AbstractScheduler):
     """ The scheduler for Obvious requesters.
     """
 
-    def __init__(self, requester: ObviousRequester, delay: float=1.0):
+    def __init__(self, delay: float=1.0):
         """ The Obvious scheduler initializer.
 
-        :param requester: The requester to schedule
-        :type requester: ObviousRequester
         :param delay: The delay to wait in between requests
         :type delay: float
         """
 
         super().__init__()
-        self._requester = requester
         self.delay = delay
-
-    @property
-    def requester(self) -> ObviousRequester:
-        """ The requester object to call for scheduled requests.
-        """
-
-        return self._requester
 
     @property
     def delay(self) -> float:
@@ -68,6 +54,13 @@ class ObviousScheduler(AbstractScheduler):
         """ Starts the infinite loop for signaling scheduled requests.
         """
 
+        self.daemon = True
         while self.is_alive():
             self.signal.send(self)
-            time.sleep(self.delay)
+            try:
+                time.sleep(self.delay)
+            except KeyboardInterrupt as exc:
+                const.log.debug((
+                    'scheduler `{self}` was terminated ...'
+                ).format(self=self))
+                break

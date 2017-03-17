@@ -15,8 +15,10 @@ __init__.py
 """
 
 from . import const
+from .client import Client
 from .engine import Engine
 from . import (
+    device,
     scheduler,
     requester,
     translator,

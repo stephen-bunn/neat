@@ -15,10 +15,17 @@ _common.py
 """
 
 import abc
+from typing import Tuple
+
+import blinker
 
 
-class AbstractTranslator(object):
-    __metaclass__ = abc.ABCMeta
+class AbstractTranslator(object, metaclass=abc.ABCMeta):
+    signal = blinker.Signal()
+
+    @abc.abstractproperty
+    def supported_requesters(self) -> Tuple[str]:
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def validate(self, content: str) -> bool:

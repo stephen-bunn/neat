@@ -26,7 +26,7 @@
     "timestamp": {
       "type": "integer"
     },
-    "device_type": {
+    "type": {
       "type": "string"
     },
     "data": {
@@ -79,9 +79,9 @@
   },
   "required": [
     "name",
-    "hname",
+    "device_name",
     "coord",
-    "time",
+    "timestamp",
     "type",
     "data",
     "parsed"

@@ -19,13 +19,11 @@ import multiprocessing
 
 import blinker
 
-from ..requester._common import AbstractRequester
 
-
-class AbstractScheduler(multiprocessing.Process):
+class AbstractScheduler(multiprocessing.Process, metaclass=abc.ABCMeta):
     """ The abstract scheduler which all schedulers much extend.
     """
-    __metaclass__ = abc.ABCMeta
+    signal = blinker.Signal()
 
     def __init__(self):
         """ The abstract scheduler initializer.
@@ -34,22 +32,6 @@ class AbstractScheduler(multiprocessing.Process):
         """
 
         super().__init__()
-
-    @property
-    def signal(self) -> blinker.Signal:
-        """ The unique signal of the scheduler.
-        """
-
-        if not hasattr(self, '_signal') or not self._signal:
-            self._signal = blinker.Signal()
-        return self._signal
-
-    @abc.abstractproperty
-    def requester(self) -> AbstractRequester:
-        """ The requester object to schedule.
-        """
-
-        raise NotImplementedError()
 
     @abc.abstractmethod
     def run(self) -> None:

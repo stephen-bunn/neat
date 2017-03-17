@@ -9,3 +9,4 @@ pint>=0.7.2
 lxml>=3.4.2
 beautifulsoup4>=4.5.3
 python-dateutil>=2.6.0
+pyyaml>=3.12

@@ -14,14 +14,16 @@ __init__.py
 .. moduleauthor:: Stephen Bunn <r>
 """
 
+import sys
+import inspect
+
 from . import _common
 from .obvious import ObviousTranslator
 
 
-TRANSLATOR_MAP = {
-    'ObviousRequester': ObviousTranslator
-}
-
-
-def get_translator(requester):
-    return TRANSLATOR_MAP[requester.__class__.__name__]
+def get_translator(requester_name):
+    for (translator_name, translator) in inspect.getmembers(
+        sys.modules[__name__], inspect.isclass
+    ):
+        if requester_name in translator.supported_requesters:
+            return translator

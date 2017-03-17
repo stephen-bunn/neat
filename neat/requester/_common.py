@@ -19,30 +19,14 @@ import abc
 import blinker
 
 
-class AbstractRequester(object):
+class AbstractRequester(object, metaclass=abc.ABCMeta):
     """ The abstract class for requester classes.
     """
-    __metaclass__ = abc.ABCMeta
-
-    @property
-    def signal(self) -> blinker.Signal:
-        """ The unique signal for the requester when complete.
-        """
-
-        if not hasattr(self, '_signal') or not self._signal:
-            self._signal = blinker.Signal()
-        return self._signal
+    signal = blinker.Signal()
 
     @abc.abstractmethod
     def request(self) -> None:
         """ The requester method for making requests.
-        """
-
-        raise NotImplementedError()
-
-    @abc.abstractmethod
-    def receive(self) -> None:
-        """ The receiver method for getting data from requests.
         """
 
         raise NotImplementedError()

@@ -31,7 +31,7 @@ class ObviousRequester(AbstractRequester):
     def __init__(
         self, device_id: int, obvious_ip: str,
         obvious_user: str, obvious_pass: str, obvious_port: int=80,
-        timeout: int=10
+        timeout: int=10, **kwargs: dict
     ):
         """ The Obvious requester initializer.
 
@@ -53,6 +53,7 @@ class ObviousRequester(AbstractRequester):
         self._timeout = timeout
         (self._obvious_ip, self._obvious_port) = (obvious_ip, obvious_port)
         (self._obvious_user, self._obvious_pass) = (obvious_user, obvious_pass)
+        self._meta = kwargs
 
     def request(self) -> None:
         """ Request information from the Obvious.
@@ -96,7 +97,7 @@ class ObviousRequester(AbstractRequester):
             const.log.debug((
                 'received response from `{resp.url}` ...'
             ).format(resp=resp))
-            self.signal.send(self, data=resp.text)
+            self.signal.send(self, data=resp.text, meta=self._meta)
         else:
             const.log.error((
                 'received invalid response from `{resp.url}` '
