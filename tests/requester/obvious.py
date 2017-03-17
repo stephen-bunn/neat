@@ -18,6 +18,7 @@ import struct
 import random
 import socket
 import unittest
+from unittest.mock import MagicMock
 
 from neat.requester.obvious import ObviousRequester
 
@@ -28,7 +29,10 @@ import requests_mock
 class ObviousRequesterTest(unittest.TestCase):
 
     def setUp(self):
-        self._req = ObviousRequester(1, '127.0.0.1', 'user', 'pass')
+        self._req = ObviousRequester(
+            1, '127.0.0.1', 'user', 'pass',
+            test='meta'
+        )
         self._req_url = (
             'http://{req._obvious_ip}:{req._obvious_port}'
             '{req._request_endpoint}?ADDRESS={req._device_id}&TYPE=DATA'
@@ -63,13 +67,18 @@ class ObviousRequesterTest(unittest.TestCase):
         that = self
 
         @self._req.signal.connect
-        def _receiver(requester, data):
+        def _receiver(requester, data, meta):
             that.assertIsInstance(requester, ObviousRequester)
             that.assertEqual(data, 'data')
+            that.assertEqual(meta, {'test': 'meta'})
 
         with requests_mock.mock() as mock:
-            mock.get(
-                self._req_url,
-                text='data'
-            )
+            mock.get(self._req_url, text='data')
             self.assertIsNone(self._req.request())
+
+            self._req.signal.send = MagicMock()
+            self._req.request()
+            self._req.signal.send.assert_called_with(
+                self._req,
+                data='data', meta={'test': 'meta'}
+            )
