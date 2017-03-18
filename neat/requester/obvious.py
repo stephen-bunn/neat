@@ -55,6 +55,18 @@ class ObviousRequester(AbstractRequester):
         (self._obvious_user, self._obvious_pass) = (obvious_user, obvious_pass)
         self._meta = kwargs
 
+    def __repr__(self):
+        """ Generates string representation of the Obvious requester.
+
+        :returns: A string representation of the Obvious requester
+        :rtype: str
+        """
+
+        return ((
+            '<{self.__class__.__name__} '
+            '({self._obvious_ip}:{self._obvious_port}) {self._device_id}>'
+        ).format(self=self))
+
     def request(self) -> None:
         """ Request information from the Obvious.
         """

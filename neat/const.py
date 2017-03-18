@@ -262,7 +262,7 @@ class _const(object):
 
         self._log_exceptions = value
         sys.excepthook = (
-            self._exceptions_handler
+            self._exception_handler
             if self._log_exceptions else
             sys.excepthook
         )

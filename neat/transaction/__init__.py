@@ -12,3 +12,5 @@ __init__.py
     :modified: 02-28-2017 15:18:42
 .. moduleauthor:: Stephen Bunn <r>
 """
+
+from .rethinkdb import RethinkDBTransaction

@@ -14,11 +14,16 @@ _common.py
 """
 
 import abc
+from typing import List
+
+from ..models import Record
+
+import blinker
 
 
-class AbstractTransaction(object):
-    __metaclass__ = abc.ABCMeta
+class AbstractTransaction(object, metaclass=abc.ABCMeta):
+    signal = blinker.Signal()
 
     @abc.abstractmethod
-    def commit(self) -> None:
+    def commit(self, records: List[Record]) -> None:
         raise NotImplementedError()
