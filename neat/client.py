@@ -20,7 +20,8 @@ from . import const
 from .engine import Engine
 from . import (
     scheduler,
-    requester
+    requester,
+    transaction
 )
 
 import yaml
@@ -42,7 +43,9 @@ class Client(object):
                 if k != '$'
             })
             device_pairs.append((device_scheduler, device_requester))
-        self.engine = Engine(dict(device_pairs))
+        self.engine = Engine(dict(device_pairs), [
+            transaction.RethinkDBTransaction('localhost', 28015, 'devices')
+        ])
 
     @staticmethod
     def from_config(config: str):
