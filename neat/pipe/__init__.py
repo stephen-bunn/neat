@@ -13,4 +13,4 @@ __init__.py
 .. moduleauthor:: Stephen Bunn <r>
 """
 
-from .rethinkdb import RethinkDBTransaction
+from .rethinkdb import RethinkDBPipe

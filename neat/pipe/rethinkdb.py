@@ -19,12 +19,12 @@ from typing import List
 
 from .. import const
 from ..models import Record
-from ._common import AbstractTransaction
+from ._common import AbstractPipe
 
 import rethinkdb
 
 
-class RethinkDBTransaction(AbstractTransaction):
+class RethinkDBPipe(AbstractPipe):
 
     def __init__(self, rethink_ip: str, rethink_port: int, rethink_table: str):
         (self._rethink_ip, self._rethink_port) = (rethink_ip, rethink_port)
@@ -70,6 +70,14 @@ class RethinkDBTransaction(AbstractTransaction):
                     .run(self.connection)
             self._table = rethinkdb.table(self._rethink_table)
         return self._table
+
+    def validate(self) -> bool:
+        try:
+            self.connection
+            return True
+        except rethinkdb.errors.ReqlDriverError as exc:
+            pass
+        return False
 
     def commit(self, records: List[Record]) -> None:
         const.log.debug((

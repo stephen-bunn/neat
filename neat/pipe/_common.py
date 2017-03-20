@@ -21,8 +21,12 @@ from ..models import Record
 import blinker
 
 
-class AbstractTransaction(object, metaclass=abc.ABCMeta):
+class AbstractPipe(object, metaclass=abc.ABCMeta):
     signal = blinker.Signal()
+
+    @abc.abstractmethod
+    def validate(self) -> bool:
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def commit(self, records: List[Record]) -> None:

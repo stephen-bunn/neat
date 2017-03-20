@@ -29,8 +29,8 @@ from .models.record import Record
 from .scheduler._common import AbstractScheduler
 from .requester._common import AbstractRequester
 from .translator._common import AbstractTranslator
+from .pipe._common import AbstractPipe
 from .translator import get_translator
-from .transaction._common import AbstractTransaction
 
 
 class Engine(object):
@@ -38,7 +38,7 @@ class Engine(object):
     def __init__(
         self,
         register: Dict[AbstractScheduler, AbstractRequester]={},
-        transactions: List[AbstractTransaction]=[],
+        pipes: List[AbstractPipe]=[],
         cpu_count: int=None, queue_size: int=None
     ):
         self.record_queue = queue.Queue(maxsize=(
@@ -47,14 +47,14 @@ class Engine(object):
             queue_size
         ))
         self._register = register
-        self._transactions = transactions
+        self._pipes = pipes
         self._cpu_count = (
             multiprocessing.cpu_count()
             if not cpu_count or not isinstance(cpu_count, int) else
             cpu_count
         )
         self._translators = {}
-        self._transaction_threads = {}
+        self._pipe_threads = {}
 
     @property
     def register(self) -> Dict[AbstractScheduler, AbstractRequester]:
@@ -65,8 +65,8 @@ class Engine(object):
         return self._translators
 
     @property
-    def transactions(self) -> List[AbstractTransaction]:
-        return self._transactions
+    def pipes(self) -> List[AbstractPipe]:
+        return self._pipes
 
     def on_scheduled(self, scheduler: AbstractScheduler) -> None:
         const.log.debug((
@@ -106,29 +106,29 @@ class Engine(object):
                 self.on_full(queued)
 
     def on_full(self, records: List[Record]) -> None:
-        for committer in self.transactions:
+        for committer in self.pipes:
             committer_thread = threading.Thread(
                 target=committer.commit, args=(records,),
                 name=(
                     '{committer.__class__.__name__}-Thread'
                 ).format(committer=committer),
             )
-            if committer not in self._transaction_threads:
-                self._transaction_threads[committer] = []
-            self._transaction_threads[committer].append(committer_thread)
+            if committer not in self._pipe_threads:
+                self._pipe_threads[committer] = []
+            self._pipe_threads[committer].append(committer_thread)
             committer_thread.start()
             const.log.debug((
                 'starting commit process for `{committer}` on thread '
                 '`{committer_thread.name}` ...'
             ).format(committer=committer, committer_thread=committer_thread))
 
-    def on_complete(self, committer: AbstractTransaction) -> None:
+    def on_complete(self, committer: AbstractPipe) -> None:
         const.log.debug((
-            'transaction `{committer}` completed, removing dead threads ...'
+            'pipe `{committer}` completed, removing dead threads ...'
         ).format(committer=committer))
-        for thread in self._transaction_threads[committer]:
+        for thread in self._pipe_threads[committer]:
             if not thread.is_alive():
-                self._transaction_threads[committer].remove(thread)
+                self._pipe_threads[committer].remove(thread)
 
     def start(self) -> None:
         const.log.info((
@@ -136,14 +136,22 @@ class Engine(object):
             '`{self.register}` ...'
         ).format(self=self))
 
-        if len(self.transactions) <= 0:
+        if len(self.pipes) <= 0:
             const.log.warning((
-                'no transactions have been added to the engine, '
+                'no pipes have been added to the engine, '
                 'records will not be saved ...'
             ))
             self.record_queue = queue.Queue(maxsize=0)
+        else:
+            for committer in self.pipes:
+                if not committer.validate():
+                    const.log.warning((
+                        'pipe `{committer}` did not pass validation, '
+                        'removing from pipes ...'
+                    ).format(committer=committer))
+                    self.pipes.remove(committer)
 
-        for committer in self.transactions:
+        for committer in self.pipes:
             committer.signal.connect(self.on_complete)
 
         for (scheduler, requester) in self.register.items():
@@ -170,7 +178,7 @@ class Engine(object):
             scheduler.terminate()
 
         still_alive = list(itertools.chain(
-            *self._transaction_threads.values()
+            *self._pipe_threads.values()
         ))
         if len(still_alive) > 0:
             const.log.debug((

@@ -21,7 +21,7 @@ from .engine import Engine
 from . import (
     scheduler,
     requester,
-    transaction
+    pipe
 )
 
 import yaml
@@ -44,7 +44,7 @@ class Client(object):
             })
             device_pairs.append((device_scheduler, device_requester))
         self.engine = Engine(dict(device_pairs), [
-            transaction.RethinkDBTransaction('localhost', 28015, 'devices')
+            pipe.RethinkDBPipe('localhost', 28015, 'devices')
         ])
 
     @staticmethod
