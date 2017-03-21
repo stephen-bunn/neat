@@ -14,12 +14,11 @@ obvious.py
 .. moduleauthor:: Stephen Bunn <r>
 """
 
-import struct
-import random
-import socket
+import logging
 import unittest
 from unittest.mock import MagicMock
 
+from neat import const
 from neat.requester.obvious import ObviousRequester
 
 import blinker
@@ -29,6 +28,7 @@ import requests_mock
 class ObviousRequesterTest(unittest.TestCase):
 
     def setUp(self):
+        const.log_level = logging.CRITICAL
         self._req = ObviousRequester(
             1, '127.0.0.1', 'user', 'pass',
             test='meta'

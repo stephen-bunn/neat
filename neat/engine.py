@@ -34,17 +34,20 @@ from .translator import get_translator
 
 
 class Engine(object):
+    _default_queue_scale = 3
 
     def __init__(
         self,
         register: Dict[AbstractScheduler, AbstractRequester]={},
         pipes: List[AbstractPipe]=[],
-        cpu_count: int=None, queue_size: int=None
+        cpu_count: int=None, queue_scale: int=3
     ):
         self.record_queue = queue.Queue(maxsize=(
-            (len(register.keys()) * 3)
-            if not queue_size or not isinstance(queue_size, int) else
-            queue_size
+            len(register.keys()) * (
+                queue_scale
+                if isinstance(queue_scale, int) and queue_scale > 0 else
+                self._default_queue_scale
+            )
         ))
         self._register = register
         self._pipes = pipes
@@ -81,13 +84,12 @@ class Engine(object):
         const.log.debug((
             'recieved data from requester `{requester}` ...'
         ).format(requester=requester, data=data))
-        if requester.__class__.__name__ not in self.translators:
-            translator = get_translator(requester.__class__.__name__)()
+        requester_name = requester.__class__.__name__
+        if requester_name not in self.translators:
+            translator = get_translator(requester_name)()
             translator.signal.connect(self.on_record)
-            self.translators[requester.__class__.__name__] = \
-                get_translator(requester.__class__.__name__)()
-        self.translators[requester.__class__.__name__]\
-            .translate(data, meta=meta)
+            self.translators[requester_name] = get_translator(requester_name)()
+        self.translators[requester_name].translate(data, meta=meta)
 
     def on_record(self, record: Record) -> None:
         if not record.validate():
@@ -96,39 +98,10 @@ class Engine(object):
             ).format(record=record))
         else:
             const.log.debug((
-                'adding record `{record}` to record queue ...'
+                'adding record `{record}` to pipes ...'
             ).format(record=record))
-            self.record_queue.put(record)
-            if self.record_queue.full():
-                queued = []
-                while not self.record_queue.empty():
-                    queued.append(self.record_queue.get())
-                self.on_full(queued)
-
-    def on_full(self, records: List[Record]) -> None:
-        for committer in self.pipes:
-            committer_thread = threading.Thread(
-                target=committer.commit, args=(records,),
-                name=(
-                    '{committer.__class__.__name__}-Thread'
-                ).format(committer=committer),
-            )
-            if committer not in self._pipe_threads:
-                self._pipe_threads[committer] = []
-            self._pipe_threads[committer].append(committer_thread)
-            committer_thread.start()
-            const.log.debug((
-                'starting commit process for `{committer}` on thread '
-                '`{committer_thread.name}` ...'
-            ).format(committer=committer, committer_thread=committer_thread))
-
-    def on_complete(self, committer: AbstractPipe) -> None:
-        const.log.debug((
-            'pipe `{committer}` completed, removing dead threads ...'
-        ).format(committer=committer))
-        for thread in self._pipe_threads[committer]:
-            if not thread.is_alive():
-                self._pipe_threads[committer].remove(thread)
+            for piper in self.pipes:
+                piper.accept(record)
 
     def start(self) -> None:
         const.log.info((
@@ -136,23 +109,13 @@ class Engine(object):
             '`{self.register}` ...'
         ).format(self=self))
 
-        if len(self.pipes) <= 0:
-            const.log.warning((
-                'no pipes have been added to the engine, '
-                'records will not be saved ...'
-            ))
-            self.record_queue = queue.Queue(maxsize=0)
-        else:
-            for committer in self.pipes:
-                if not committer.validate():
-                    const.log.warning((
-                        'pipe `{committer}` did not pass validation, '
-                        'removing from pipes ...'
-                    ).format(committer=committer))
-                    self.pipes.remove(committer)
-
         for committer in self.pipes:
-            committer.signal.connect(self.on_complete)
+            if not committer.validate():
+                const.log.warning((
+                    'pipe `{committer}` did not pass validation, '
+                    'removing from pipes ...'
+                ).format(committer=committer))
+                self.pipes.remove(committer)
 
         for (scheduler, requester) in self.register.items():
             scheduler.signal.connect(self.on_scheduled)
@@ -186,8 +149,8 @@ class Engine(object):
                 'KeyboardInterrupt again for forced stop ...'
             ).format(still_alive=still_alive))
             try:
-                for thread in still_alive:
-                    thread.join()
+                for transaction in still_alive:
+                    transaction.join()
             except KeyboardInterrupt:
                 const.log.warning(('forcing stop ...'))
                 sys.exit(0)

@@ -34,6 +34,17 @@ class SimpleDelayScheduler(AbstractScheduler):
         super().__init__()
         self.delay = delay
 
+    def __repr__(self):
+        """ A string representation of the scheduler object.
+
+        :returns: A string representation of the scheduler object
+        :rtype: str
+        """
+
+        return (
+            '<{self.name} delay={self.delay}>'
+        ).format(self=self)
+
     @property
     def delay(self) -> float:
         """ The delay period in between scheduled requests.

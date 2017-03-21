@@ -109,6 +109,8 @@ class ObviousTranslator(AbstractTranslator):
         # temperature
         'Degrees C': 'degC',
         'Degrees F': 'degF',
+        'C': 'degC',
+        'F': 'degF',
         # humidity
         '%RH': '',
         # phase
@@ -161,27 +163,34 @@ class ObviousTranslator(AbstractTranslator):
         return self._unit_map
 
     def validate(self, data: str) -> bool:
-        return bs4.BeautifulSoup(data, self.parser)\
-            .find('error').text == '0'
+        return int(
+            bs4.BeautifulSoup(data, self.parser)
+            .find('error').text
+        ) == 0
 
     def translate(self, data: str, meta: dict={}) -> None:
-        soup = bs4.BeautifulSoup(data, self.parser)
-        for device in soup.find_all('devices'):
-            record = Record(**meta)
-            record.device_name = device.find('name').text
-            for rec in device.find_all('record'):
-                record.timestamp = dateutil.parser.parse(
-                    rec.find('time').text
-                ).timestamp()
-                rec_error = rec.find('error').text
-                for point in sorted(
-                    rec.find_all('point'),
-                    key=lambda x: int(x.attrs['number'])
-                ):
-                    record.data.append(RecordPoint(
-                        name=point.attrs['name'],
-                        value=float(point.attrs['value']),
-                        unit=str(self.unit_map[point.attrs['units']].units)
-                    ))
+        if self.validate(data):
+            soup = bs4.BeautifulSoup(data, self.parser)
+            for device in soup.find_all('devices'):
+                record = Record(**meta)
+                record.device_name = device.find('name').text
+                for rec in device.find_all('record'):
+                    record.timestamp = dateutil.parser.parse(
+                        rec.find('time').text
+                    ).timestamp()
+                    rec_error = rec.find('error').text
+                    for point in sorted(
+                        rec.find_all('point'),
+                        key=lambda x: int(x.attrs['number'])
+                    ):
+                        try:
+                            rec_point_value = float(point.attrs['value'])
+                        except ValueError:
+                            rec_point_value = None
+                        record.data.append(RecordPoint(
+                            name=point.attrs['name'],
+                            value=rec_point_value,
+                            unit=str(self.unit_map[point.attrs['units']].units)
+                        ))
 
-            self.signal.send(record)
+                self.signal.send(record)

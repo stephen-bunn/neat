@@ -15,6 +15,8 @@ rethinkdb.py
 """
 
 import time
+import queue
+import threading
 from typing import List
 
 from .. import const
@@ -26,9 +28,15 @@ import rethinkdb
 
 class RethinkDBPipe(AbstractPipe):
 
-    def __init__(self, rethink_ip: str, rethink_port: int, rethink_table: str):
+    def __init__(
+        self, rethink_ip: str, rethink_port: int, rethink_table: str,
+        record_size: int=10
+    ):
         (self._rethink_ip, self._rethink_port) = (rethink_ip, rethink_port)
         self._rethink_table = rethink_table
+        (self._record_list, self._record_size,) = ([], record_size,)
+        self._commit_thread = None
+        self._ready = True
 
     def __repr__(self):
         return ((
@@ -71,6 +79,16 @@ class RethinkDBPipe(AbstractPipe):
             self._table = rethinkdb.table(self._rethink_table)
         return self._table
 
+    def accept(self, record: Record) -> None:
+        self._record_list.append(record)
+        if len(self._record_list) > self._record_size:
+            records = self._record_list
+            self._record_list = []
+            self._commit_thread = threading.Thread(
+                target=self.commit, args=(records,)
+            )
+            self._commit_thread.start()
+
     def validate(self) -> bool:
         try:
             self.connection
@@ -80,9 +98,12 @@ class RethinkDBPipe(AbstractPipe):
         return False
 
     def commit(self, records: List[Record]) -> None:
+        while not self._ready:
+            pass
+        self._ready = False
         const.log.debug((
             'commiting `{records_len}` records into rethinkdb `{self}` ...'
         ).format(self=self, records_len=len(records)))
         self.table.insert([record.to_dict() for record in records])\
             .run(self.connection)
-        self.signal.send(self)
+        self._ready = True

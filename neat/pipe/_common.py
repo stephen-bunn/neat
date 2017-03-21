@@ -22,7 +22,10 @@ import blinker
 
 
 class AbstractPipe(object, metaclass=abc.ABCMeta):
-    signal = blinker.Signal()
+
+    @abc.abstractmethod
+    def accept(self, records: Record) -> None:
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def validate(self) -> bool:

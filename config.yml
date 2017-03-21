@@ -1,0 +1,51 @@
+---
+pipes:
+  - $: RethinkDBPipe
+    rethink_ip: localhost
+    rethink_port: 28015
+    rethink_table: devices
+devices:
+  - scheduler:
+      $:            SimpleDelayScheduler
+      delay:        1.0
+    requester:
+      $:            ObviousRequester
+      device_id:    17
+      obvious_ip:   152.10.6.240
+      obvious_port: 80
+      obvious_user: user
+      obvious_pass: ASUREI
+      name:         flow.2
+      type:         FLOW
+      lat:          -12.3
+      lon:          12.3
+
+  - scheduler:
+      $:            SimpleDelayScheduler
+      delay:        2.0
+    requester:
+      $:            ObviousRequester
+      device_id:    51
+      obvious_ip:   152.10.6.240
+      obvious_port: 80
+      obvious_user: user
+      obvious_pass: ASUREI
+      name:         pv.1
+      type:         PV
+      lat:          -12.3
+      lon:          12.3
+
+  - scheduler:
+      $:            SimpleDelayScheduler
+      delay:        0.5
+    requester:
+      $:            ObviousRequester
+      device_id:    19
+      obvious_ip:   152.10.6.240
+      obvious_port: 80
+      obvious_user: user
+      obvious_pass: ASUREI
+      name:         flow.1
+      type:         FLOW
+      lat:          -12.3
+      lon:          12.3

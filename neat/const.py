@@ -130,6 +130,13 @@ class _const(object):
         return os.path.dirname(self.base_dir)
 
     @property
+    def record_backup_dir(self) -> str:
+        """ The directory in which to store record backups on engine exit.
+        """
+
+        return os.path.join(os.path.dirname(base_dir), 'record_backup')
+
+    @property
     def schema_dir(self) -> str:
         """ The directory schemas live in.
         """
@@ -286,5 +293,5 @@ class _const(object):
         sys.__excepthook__(exctype, value, tb)
 
 
-# NOTE: Do not remove (enables constants), requires python>=3.x
+# NOTE: Do not remove, enables constants, requires python>=3.x
 sys.modules[__name__] = _const()

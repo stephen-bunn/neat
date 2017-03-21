@@ -31,7 +31,8 @@ class Client(object):
 
     def __init__(self, config: dict):
         device_pairs = []
-        for device in config:
+        pipers = []
+        for device in config['devices']:
             device_scheduler = getattr(scheduler, device['scheduler']['$'])(**{
                 k: v
                 for (k, v) in device['scheduler'].items()
@@ -43,9 +44,12 @@ class Client(object):
                 if k != '$'
             })
             device_pairs.append((device_scheduler, device_requester))
-        self.engine = Engine(dict(device_pairs), [
-            pipe.RethinkDBPipe('localhost', 28015, 'devices')
-        ])
+        for piper in config['pipes']:
+            piper = getattr(pipe, piper['$'])(**{
+                k: v for (k, v) in piper.items() if k != '$'
+            })
+            pipers.append(piper)
+        self.engine = Engine(dict(device_pairs), pipers)
 
     @staticmethod
     def from_config(config: str):

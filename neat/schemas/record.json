@@ -38,7 +38,7 @@
             "type": "string"
           },
           "value": {
-            "type": "number"
+            "type": ["number", "null"]
           },
           "unit": {
             "type": "string"
