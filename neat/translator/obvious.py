@@ -187,6 +187,10 @@ class ObviousTranslator(AbstractTranslator):
                             rec_point_value = float(point.attrs['value'])
                         except ValueError:
                             rec_point_value = None
+                        try:
+                            self.unit_map[point.attrs['units']]
+                        except KeyError:
+                            point.attrs['units'] = ''
                         record.data.append(RecordPoint(
                             name=point.attrs['name'],
                             value=rec_point_value,

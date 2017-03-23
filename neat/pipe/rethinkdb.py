@@ -15,8 +15,6 @@ rethinkdb.py
 """
 
 import time
-import queue
-import threading
 from typing import List
 
 from .. import const
@@ -35,8 +33,11 @@ class RethinkDBPipe(AbstractPipe):
         (self._rethink_ip, self._rethink_port) = (rethink_ip, rethink_port)
         self._rethink_table = rethink_table
         (self._record_list, self._record_size,) = ([], record_size,)
-        self._commit_thread = None
-        self._ready = True
+
+        if self._rethink_table not in rethinkdb.table_list()\
+                .run(self.connection):
+            rethinkdb.table_create(self._rethink_table).run(self.connection)
+        self.table = rethinkdb.table(self._rethink_table)
 
     def __repr__(self):
         return ((
@@ -46,48 +47,28 @@ class RethinkDBPipe(AbstractPipe):
 
     @property
     def connection(self):
-        if not hasattr(self, '_connection'):
-            const.log.info((
-                'initializing connection to rethink database at '
-                '`{self._rethink_ip}:{self._rethink_port}` ...'
-            ).format(self=self))
-            try:
-                self._connection = rethinkdb.connect(
-                    self._rethink_ip, self._rethink_port,
-                    db=const.module_name
-                )
-                if const.module_name not in rethinkdb.db_list()\
-                        .run(self._connection):
-                    rethinkdb.db_create(const.module_name)\
-                        .run(self._connection)
-            except rethinkdb.errors.ReqlDriverError as exc:
-                const.log.error((
-                    'could not connect to rethinkdb server at '
-                    '`{self._rethink_ip}:{self._rethink_port}`, '
-                    '{exc.message} ...'
-                ).format(self=self, exc=exc))
-                raise exc
-        return self._connection
-
-    @property
-    def table(self):
-        if not hasattr(self, '_table'):
-            if self._rethink_table not in rethinkdb.table_list()\
-                    .run(self.connection):
-                rethinkdb.table_create(self._rethink_table)\
-                    .run(self.connection)
-            self._table = rethinkdb.table(self._rethink_table)
-        return self._table
+        # NOTE: unfortunately rethinkdb driver connections are not thread safe
+        # For this reason, a new connection must be initalized on each request
+        try:
+            connection = rethinkdb.connect(
+                self._rethink_ip, self._rethink_port,
+                db=const.module_name
+            )
+            if const.module_name not in rethinkdb.db_list()\
+                    .run(connection):
+                rethinkdb.db_create(const.module_name)\
+                    .run(connection)
+            return connection
+        except rethinkdb.errors.ReqlDriverError as exc:
+            const.log.error((
+                'could not connect to rethinkdb server at '
+                '`{self._rethink_ip}:{self._rethink_port}`, '
+                '{exc.message} ...'
+            ).format(self=self, exc=exc))
+            raise exc
 
     def accept(self, record: Record) -> None:
-        self._record_list.append(record)
-        if len(self._record_list) > self._record_size:
-            records = self._record_list
-            self._record_list = []
-            self._commit_thread = threading.Thread(
-                target=self.commit, args=(records,)
-            )
-            self._commit_thread.start()
+        self.commit([record])
 
     def validate(self) -> bool:
         try:
@@ -98,12 +79,8 @@ class RethinkDBPipe(AbstractPipe):
         return False
 
     def commit(self, records: List[Record]) -> None:
-        while not self._ready:
-            pass
-        self._ready = False
         const.log.debug((
             'commiting `{records_len}` records into rethinkdb `{self}` ...'
         ).format(self=self, records_len=len(records)))
         self.table.insert([record.to_dict() for record in records])\
             .run(self.connection)
-        self._ready = True

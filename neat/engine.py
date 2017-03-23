@@ -15,14 +15,9 @@ engine.py
 """
 
 import sys
-import queue
 import itertools
-import threading
 import multiprocessing
 from typing import Dict, List
-
-import blinker
-import jsonschema
 
 from . import const
 from .models.record import Record
@@ -34,21 +29,13 @@ from .translator import get_translator
 
 
 class Engine(object):
-    _default_queue_scale = 3
 
     def __init__(
         self,
         register: Dict[AbstractScheduler, AbstractRequester]={},
         pipes: List[AbstractPipe]=[],
-        cpu_count: int=None, queue_scale: int=3
+        cpu_count: int=None
     ):
-        self.record_queue = queue.Queue(maxsize=(
-            len(register.keys()) * (
-                queue_scale
-                if isinstance(queue_scale, int) and queue_scale > 0 else
-                self._default_queue_scale
-            )
-        ))
         self._register = register
         self._pipes = pipes
         self._cpu_count = (
@@ -57,7 +44,6 @@ class Engine(object):
             cpu_count
         )
         self._translators = {}
-        self._pipe_threads = {}
 
     @property
     def register(self) -> Dict[AbstractScheduler, AbstractRequester]:
@@ -139,18 +125,3 @@ class Engine(object):
                 '`{scheduler.pid}` is terminated ...'
             ).format(scheduler=scheduler))
             scheduler.terminate()
-
-        still_alive = list(itertools.chain(
-            *self._pipe_threads.values()
-        ))
-        if len(still_alive) > 0:
-            const.log.debug((
-                'transactions {still_alive} are still in progress, '
-                'KeyboardInterrupt again for forced stop ...'
-            ).format(still_alive=still_alive))
-            try:
-                for transaction in still_alive:
-                    transaction.join()
-            except KeyboardInterrupt:
-                const.log.warning(('forcing stop ...'))
-                sys.exit(0)
