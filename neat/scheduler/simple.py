@@ -5,7 +5,7 @@
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
 
 """
-obvious.py
+Obvius.py
 .. module:: neat
     :platform: Linux, MacOSX, Win32
     :synopsis:
@@ -21,11 +21,11 @@ from ._common import AbstractScheduler
 
 
 class SimpleDelayScheduler(AbstractScheduler):
-    """ The scheduler for Obvious requesters.
+    """ The scheduler for simple requesters.
     """
 
     def __init__(self, delay: float=1.0):
-        """ The Obvious scheduler initializer.
+        """ The SimpleDelayScheduler scheduler initializer.
 
         :param delay: The delay to wait in between requests
         :type delay: float

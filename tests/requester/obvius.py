@@ -5,7 +5,7 @@
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
 
 """
-obvious.py
+Obvius.py
 .. module:: neat
     :platform: Linux, MacOSX, Win32
     :synopsis:
@@ -19,22 +19,22 @@ import unittest
 from unittest.mock import MagicMock
 
 from neat import const
-from neat.requester.obvious import ObviousRequester
+from neat.requester.obvius import ObviusRequester
 
 import blinker
 import requests_mock
 
 
-class ObviousRequesterTest(unittest.TestCase):
+class ObviusRequesterTest(unittest.TestCase):
 
     def setUp(self):
         const.log_level = logging.CRITICAL
-        self._req = ObviousRequester(
+        self._req = ObviusRequester(
             1, '127.0.0.1', 'user', 'pass',
             test='meta'
         )
         self._req_url = (
-            'http://{req._obvious_ip}:{req._obvious_port}'
+            'http://{req._Obvius_ip}:{req._Obvius_port}'
             '{req._request_endpoint}?ADDRESS={req._device_id}&TYPE=DATA'
         ).format(req=self._req)
 
@@ -43,21 +43,21 @@ class ObviousRequesterTest(unittest.TestCase):
 
     def test_initialization(self):
         with self.assertRaises(TypeError):
-            ObviousRequester()
+            ObviusRequester()
 
-        req = ObviousRequester(None, None, None, None)
+        req = ObviusRequester(None, None, None, None)
         self.assertIsNone(req._device_id)
-        self.assertIsNone(req._obvious_ip)
-        self.assertIsNone(req._obvious_user)
-        self.assertIsNone(req._obvious_pass)
-        self.assertEqual(req._obvious_port, 80)
+        self.assertIsNone(req._Obvius_ip)
+        self.assertIsNone(req._Obvius_user)
+        self.assertIsNone(req._Obvius_pass)
+        self.assertEqual(req._Obvius_port, 80)
 
-        req = ObviousRequester(1, '127.0.0.1', 'user', 'pass', 93)
+        req = ObviusRequester(1, '127.0.0.1', 'user', 'pass', 93)
         self.assertEqual(req._device_id, 1)
-        self.assertEqual(req._obvious_ip, '127.0.0.1')
-        self.assertEqual(req._obvious_user, 'user')
-        self.assertEqual(req._obvious_pass, 'pass')
-        self.assertEqual(req._obvious_port, 93)
+        self.assertEqual(req._Obvius_ip, '127.0.0.1')
+        self.assertEqual(req._Obvius_user, 'user')
+        self.assertEqual(req._Obvius_pass, 'pass')
+        self.assertEqual(req._Obvius_port, 93)
         del req
 
     def test_signal(self):
@@ -68,7 +68,7 @@ class ObviousRequesterTest(unittest.TestCase):
 
         @self._req.signal.connect
         def _receiver(requester, data, meta):
-            that.assertIsInstance(requester, ObviousRequester)
+            that.assertIsInstance(requester, ObviusRequester)
             that.assertEqual(data, 'data')
             that.assertEqual(meta, {'test': 'meta'})
 

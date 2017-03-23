@@ -18,7 +18,7 @@ import sys
 import inspect
 
 from . import _common
-from .obvious import ObviousTranslator
+from .obvius import ObviusTranslator
 
 
 def get_translator(requester_name):

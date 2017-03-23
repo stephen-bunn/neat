@@ -5,7 +5,7 @@
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
 
 """
-obvious.py
+Obvius.py
 .. module:: neat
     :platform: Linux, MacOSX, Win32
     :synopsis:
@@ -25,8 +25,8 @@ import pint
 import dateutil.parser
 
 
-class ObviousTranslator(AbstractTranslator):
-    supported_requesters = ('ObviousRequester',)
+class ObviusTranslator(AbstractTranslator):
+    supported_requesters = ('ObviusRequester',)
     _parser_pref = ['lxml', 'html.parser']
     _expression_unit_map = {
         # energy

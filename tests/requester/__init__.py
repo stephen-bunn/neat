@@ -14,4 +14,4 @@ __init__.py
 .. moduleauthor:: Stephen Bunn <r>
 """
 
-from .obvious import *
+from .obvius import *

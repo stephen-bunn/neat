@@ -5,7 +5,7 @@
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
 
 """
-obvious.py
+Obvius.py
 .. module:: neat
     :platform: Linux, MacOSX, Win32
     :synopsis:
@@ -22,68 +22,68 @@ from .. import const
 from ._common import AbstractRequester
 
 
-class ObviousRequester(AbstractRequester):
-    """ The requester for the Obvious server.
+class ObviusRequester(AbstractRequester):
+    """ The requester for the Obvius server.
     """
 
     _request_endpoint = '/setup/devicexml.cgi'
 
     def __init__(
-        self, device_id: int, obvious_ip: str,
-        obvious_user: str, obvious_pass: str, obvious_port: int=80,
+        self, device_id: int, Obvius_ip: str,
+        Obvius_user: str, Obvius_pass: str, Obvius_port: int=80,
         timeout: int=10, **kwargs: dict
     ):
-        """ The Obvious requester initializer.
+        """ The Obvius requester initializer.
 
-        :param device_id: The id of the Obvious device to request
+        :param device_id: The id of the Obvius device to request
         :type device_id: int
-        :param obvious_ip: The IP of the Obvious server
-        :type obvious_ip: str
-        :param obvious_user: The auth username of the Obvious server
-        :type obvious_user: str
-        :param obvious_pass: The auth password of the Obvious server (readonly)
-        :type obvious_pass: str
-        :param obvious_port: The port of the Obvious server (80)
-        :type obvious_port: int
+        :param Obvius_ip: The IP of the Obvius server
+        :type Obvius_ip: str
+        :param Obvius_user: The auth username of the Obvius server
+        :type Obvius_user: str
+        :param Obvius_pass: The auth password of the Obvius server (readonly)
+        :type Obvius_pass: str
+        :param Obvius_port: The port of the Obvius server (80)
+        :type Obvius_port: int
         :param timeout: The request timeout period (10 seconds)
         :type timeout: int
         """
 
         self._device_id = device_id
         self._timeout = timeout
-        (self._obvious_ip, self._obvious_port) = (obvious_ip, obvious_port)
-        (self._obvious_user, self._obvious_pass) = (obvious_user, obvious_pass)
+        (self._Obvius_ip, self._Obvius_port) = (Obvius_ip, Obvius_port)
+        (self._Obvius_user, self._Obvius_pass) = (Obvius_user, Obvius_pass)
         self._meta = kwargs
 
     def __repr__(self):
-        """ Generates string representation of the Obvious requester.
+        """ Generates string representation of the Obvius requester.
 
-        :returns: A string representation of the Obvious requester
+        :returns: A string representation of the Obvius requester
         :rtype: str
         """
 
         return ((
             '<{self.__class__.__name__} '
-            '({self._obvious_ip}:{self._obvious_port}) {self._device_id}>'
+            '({self._Obvius_ip}:{self._Obvius_port}) {self._device_id}>'
         ).format(self=self))
 
     def request(self) -> None:
-        """ Request information from the Obvious.
+        """ Request information from the Obvius.
         """
 
         const.log.debug((
             'requesting device `{self._device_id}` status from '
-            '`{self._obvious_ip}` ...'
+            '`{self._Obvius_ip}` ...'
         ).format(self=self))
         try:
             requests.get(
                 urllib.parse.urljoin(
                     (
-                        'http://{self._obvious_ip}:{self._obvious_port}'
+                        'http://{self._Obvius_ip}:{self._Obvius_port}'
                     ).format(self=self),
                     self._request_endpoint
                 ),
-                auth=(self._obvious_user, self._obvious_pass),
+                auth=(self._Obvius_user, self._Obvius_pass),
                 params={'ADDRESS': self._device_id, 'TYPE': 'DATA'},
                 hooks=dict(response=self.receive),
                 timeout=self._timeout
@@ -91,7 +91,7 @@ class ObviousRequester(AbstractRequester):
         except requests.exceptions.ConnectTimeout as exc:
             const.log.error((
                 'connection timeout occured after `{self._timeout}` seconds '
-                'for device `{self._device_id}` at `{self._obvious_ip}` ...'
+                'for device `{self._device_id}` at `{self._Obvius_ip}` ...'
             ).format(self=self))
 
     def receive(self, resp: requests.Response, *args, **kwargs) -> None:
