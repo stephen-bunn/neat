@@ -14,8 +14,6 @@ engine.py
 .. moduleauthor:: Stephen Bunn <r>
 """
 
-import sys
-import itertools
 import multiprocessing
 from typing import Dict, List
 
@@ -95,19 +93,18 @@ class Engine(object):
             '`{self.register}` ...'
         ).format(self=self))
 
-        for committer in self.pipes:
-            if not committer.validate():
+        for piper in self.pipes:
+            if not piper.validate():
                 const.log.warning((
-                    'pipe `{committer}` did not pass validation, '
+                    'pipe `{piper}` did not pass validation, '
                     'removing from pipes ...'
-                ).format(committer=committer))
-                self.pipes.remove(committer)
+                ).format(piper=piper))
+                self.pipes.remove(piper)
 
         for (scheduler, requester) in self.register.items():
             scheduler.signal.connect(self.on_scheduled)
             requester.signal.connect(self.on_data)
             scheduler.start()
-
             const.log.info((
                 'starting scheduler `{scheduler}` signal as daemon '
                 'with pid `{scheduler.pid}` for `{requester}` ...'

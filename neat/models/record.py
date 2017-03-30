@@ -33,6 +33,15 @@ class RecordPoint(object):
                 self._meta[k] = v
 
     @property
+    def number(self) -> int:
+        if hasattr(self, '_number'):
+            return self._number
+
+    @number.setter
+    def number(self, number: int) -> None:
+        self._number = number
+
+    @property
     def name(self) -> str:
         if hasattr(self, '_name'):
             return self._name
@@ -60,11 +69,14 @@ class RecordPoint(object):
         self._value = value
 
     def to_dict(self) -> dict:
-        return {
+        data = {
             'name': self.name,
             'value': self.value,
             'unit': self.unit
         }
+        if hasattr(self, '_number'):
+            data['number'] = self.number
+        return data
 
 
 class Record(AbstractModel):

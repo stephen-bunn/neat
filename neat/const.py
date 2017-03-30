@@ -137,6 +137,13 @@ class _const(object):
         return os.path.join(os.path.dirname(base_dir), 'record_backup')
 
     @property
+    def record_backup_store(self) -> str:
+        """ The file in which to store previous execution incomplete records.
+        """
+
+        return os.path.join(self.record_backup_dir, 'backup.json')
+
+    @property
     def schema_dir(self) -> str:
         """ The directory schemas live in.
         """

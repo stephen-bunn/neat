@@ -192,6 +192,7 @@ class ObviusTranslator(AbstractTranslator):
                         except KeyError:
                             point.attrs['units'] = ''
                         record.data.append(RecordPoint(
+                            number=int(point.attrs['number']),
                             name=point.attrs['name'],
                             value=rec_point_value,
                             unit=str(self.unit_map[point.attrs['units']].units)

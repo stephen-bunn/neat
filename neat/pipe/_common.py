@@ -18,8 +18,6 @@ from typing import List
 
 from ..models import Record
 
-import blinker
-
 
 class AbstractPipe(object, metaclass=abc.ABCMeta):
 

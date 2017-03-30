@@ -1,156 +1,156 @@
 ---
 pipes:
-  - $: RethinkDBPipe
-    rethink_ip: localhost
-    rethink_port: 28015
+  - $:             RethinkDBPipe
+    rethink_ip:    localhost
+    rethink_port:  28015
     rethink_table: devices
 devices:
   - scheduler:
-      $:            SimpleDelayScheduler
-      delay:        10.0
+      $:           SimpleDelayScheduler
+      delay:       10.0
     requester:
-      $:            ObviousRequester
-      device_id:    17
-      obvious_ip:   152.10.6.240
-      obvious_port: 80
-      obvious_user: user
-      obvious_pass: ASUREI
-      name:         flow.1
-      type:         FLOW
-      lat:          -12.3
-      lon:          12.3
+      $:           ObviusRequester
+      device_id:   17
+      obvius_ip:   152.10.6.240
+      obvius_port: 80
+      obvius_user: user
+      obvius_pass: ASUREI
+      name:        flow.1
+      type:        FLOW
+      lat:         -12.3
+      lon:         12.3
 
   - scheduler:
-      $:            SimpleDelayScheduler
-      delay:        10.0
+      $:           SimpleDelayScheduler
+      delay:       10.0
     requester:
-      $:            ObviousRequester
-      device_id:    18
-      obvious_ip:   152.10.6.240
-      obvious_port: 80
-      obvious_user: user
-      obvious_pass: ASUREI
-      name:         flow.2
-      type:         FLOW
-      lat:          -12.3
-      lon:          12.3
+      $:           ObviusRequester
+      device_id:   18
+      obvius_ip:   152.10.6.240
+      obvius_port: 80
+      obvius_user: user
+      obvius_pass: ASUREI
+      name:        flow.2
+      type:        FLOW
+      lat:         -12.3
+      lon:         12.3
 
-  - scheduler:
-      $:            SimpleDelayScheduler
-      delay:        10.0
-    requester:
-      $:            ObviousRequester
-      device_id:    19
-      obvious_ip:   152.10.6.240
-      obvious_port: 80
-      obvious_user: user
-      obvious_pass: ASUREI
-      name:         flow.3
-      type:         FLOW
-      lat:          -12.3
-      lon:          12.3
-
-  - scheduler:
-      $:            SimpleDelayScheduler
-      delay:        10.0
-    requester:
-      $:            ObviousRequester
-      device_id:    21
-      obvious_ip:   152.10.6.240
-      obvious_port: 80
-      obvious_user: user
-      obvious_pass: ASUREI
-      name:         flow.4
-      type:         FLOW
-      lat:          -12.3
-      lon:          12.3
-
-  - scheduler:
-      $:            SimpleDelayScheduler
-      delay:        10.0
-    requester:
-      $:            ObviousRequester
-      device_id:    51
-      obvious_ip:   152.10.6.240
-      obvious_port: 80
-      obvious_user: user
-      obvious_pass: ASUREI
-      name:         pv.1
-      type:         PV
-      lat:          -12.3
-      lon:          12.3
-
-  - scheduler:
-      $:            SimpleDelayScheduler
-      delay:        10.0
-    requester:
-      $:            ObviousRequester
-      device_id:    101
-      obvious_ip:   152.10.6.240
-      obvious_port: 80
-      obvious_user: user
-      obvious_pass: ASUREI
-      name:         energy.1
-      type:         ENERGY
-      lat:          -12.3
-      lon:          12.3
-
-  - scheduler:
-      $:            SimpleDelayScheduler
-      delay:        10.0
-    requester:
-      $:            ObviousRequester
-      device_id:    117
-      obvious_ip:   152.10.6.240
-      obvious_port: 80
-      obvious_user: user
-      obvious_pass: ASUREI
-      name:         solar_therm.1
-      type:         SOLAR_THERM
-      lat:          -12.3
-      lon:          12.3
-
-  - scheduler:
-      $:            SimpleDelayScheduler
-      delay:        10.0
-    requester:
-      $:            ObviousRequester
-      device_id:    118
-      obvious_ip:   152.10.6.240
-      obvious_port: 80
-      obvious_user: user
-      obvious_pass: ASUREI
-      name:         solar_therm.2
-      type:         SOLAR_THERM
-      lat:          -12.3
-      lon:          12.3
-
-  - scheduler:
-      $:            SimpleDelayScheduler
-      delay:        10.0
-    requester:
-      $:            ObviousRequester
-      device_id:    119
-      obvious_ip:   152.10.6.240
-      obvious_port: 80
-      obvious_user: user
-      obvious_pass: ASUREI
-      name:         solar_therm.3
-      type:         SOLAR_THERM
-      lat:          -12.3
-      lon:          12.3
-
-  - scheduler:
-      $:            SimpleDelayScheduler
-      delay:        10.0
-    requester:
-      $:            ObviousRequester
-      device_id:    121
-      obvious_ip:   152.10.6.240
-      obvious_port: 80
-      obvious_user: user
-      obvious_pass: ASUREI
-      name:         solar_therm.4
-      type:         SOLAR_THERM
-      lat:          -12.3
-      lon:          12.3
+  # - scheduler:
+  #     $:           SimpleDelayScheduler
+  #     delay:       10.0
+  #   requester:
+  #     $:           ObviusRequester
+  #     device_id:   19
+  #     obvius_ip:   152.10.6.240
+  #     obvius_port: 80
+  #     obvius_user: user
+  #     obvius_pass: ASUREI
+  #     name:        flow.3
+  #     type:        FLOW
+  #     lat:         -12.3
+  #     lon:         12.3
+  #
+  # - scheduler:
+  #     $:           SimpleDelayScheduler
+  #     delay:       10.0
+  #   requester:
+  #     $:           ObviusRequester
+  #     device_id:   21
+  #     obvius_ip:   152.10.6.240
+  #     obvius_port: 80
+  #     obvius_user: user
+  #     obvius_pass: ASUREI
+  #     name:        flow.4
+  #     type:        FLOW
+  #     lat:         -12.3
+  #     lon:         12.3
+  #
+  # - scheduler:
+  #     $:           SimpleDelayScheduler
+  #     delay:       10.0
+  #   requester:
+  #     $:           ObviusRequester
+  #     device_id:   51
+  #     obvius_ip:   152.10.6.240
+  #     obvius_port: 80
+  #     obvius_user: user
+  #     obvius_pass: ASUREI
+  #     name:        pv.1
+  #     type:        PV
+  #     lat:         -12.3
+  #     lon:         12.3
+  #
+  # - scheduler:
+  #     $:           SimpleDelayScheduler
+  #     delay:       10.0
+  #   requester:
+  #     $:           ObviusRequester
+  #     device_id:   101
+  #     obvius_ip:   152.10.6.240
+  #     obvius_port: 80
+  #     obvius_user: user
+  #     obvius_pass: ASUREI
+  #     name:        energy.1
+  #     type:        ENERGY
+  #     lat:         -12.3
+  #     lon:         12.3
+  #
+  # - scheduler:
+  #     $:           SimpleDelayScheduler
+  #     delay:       10.0
+  #   requester:
+  #     $:           ObviusRequester
+  #     device_id:   117
+  #     obvius_ip:   152.10.6.240
+  #     obvius_port: 80
+  #     obvius_user: user
+  #     obvius_pass: ASUREI
+  #     name:        solar_therm.1
+  #     type:        SOLAR_THERM
+  #     lat:         -12.3
+  #     lon:         12.3
+  #
+  # - scheduler:
+  #     $:           SimpleDelayScheduler
+  #     delay:       10.0
+  #   requester:
+  #     $:           ObviusRequester
+  #     device_id:   118
+  #     obvius_ip:   152.10.6.240
+  #     obvius_port: 80
+  #     obvius_user: user
+  #     obvius_pass: ASUREI
+  #     name:        solar_therm.2
+  #     type:        SOLAR_THERM
+  #     lat:         -12.3
+  #     lon:         12.3
+  #
+  # - scheduler:
+  #     $:           SimpleDelayScheduler
+  #     delay:       10.0
+  #   requester:
+  #     $:           ObviusRequester
+  #     device_id:   119
+  #     obvius_ip:   152.10.6.240
+  #     obvius_port: 80
+  #     obvius_user: user
+  #     obvius_pass: ASUREI
+  #     name:        solar_therm.3
+  #     type:        SOLAR_THERM
+  #     lat:         -12.3
+  #     lon:         12.3
+  #
+  # - scheduler:
+  #     $:           SimpleDelayScheduler
+  #     delay:       10.0
+  #   requester:
+  #     $:           ObviusRequester
+  #     device_id:   121
+  #     obvius_ip:   152.10.6.240
+  #     obvius_port: 80
+  #     obvius_user: user
+  #     obvius_pass: ASUREI
+  #     name:        solar_therm.4
+  #     type:        SOLAR_THERM
+  #     lat:         -12.3
+  #     lon:         12.3
