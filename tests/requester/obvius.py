@@ -34,7 +34,7 @@ class ObviusRequesterTest(unittest.TestCase):
             test='meta'
         )
         self._req_url = (
-            'http://{req._Obvius_ip}:{req._Obvius_port}'
+            'http://{req._obvius_ip}:{req._obvius_port}'
             '{req._request_endpoint}?ADDRESS={req._device_id}&TYPE=DATA'
         ).format(req=self._req)
 
@@ -47,17 +47,17 @@ class ObviusRequesterTest(unittest.TestCase):
 
         req = ObviusRequester(None, None, None, None)
         self.assertIsNone(req._device_id)
-        self.assertIsNone(req._Obvius_ip)
-        self.assertIsNone(req._Obvius_user)
-        self.assertIsNone(req._Obvius_pass)
-        self.assertEqual(req._Obvius_port, 80)
+        self.assertIsNone(req._obvius_ip)
+        self.assertIsNone(req._obvius_user)
+        self.assertIsNone(req._obvius_pass)
+        self.assertEqual(req._obvius_port, 80)
 
         req = ObviusRequester(1, '127.0.0.1', 'user', 'pass', 93)
         self.assertEqual(req._device_id, 1)
-        self.assertEqual(req._Obvius_ip, '127.0.0.1')
-        self.assertEqual(req._Obvius_user, 'user')
-        self.assertEqual(req._Obvius_pass, 'pass')
-        self.assertEqual(req._Obvius_port, 93)
+        self.assertEqual(req._obvius_ip, '127.0.0.1')
+        self.assertEqual(req._obvius_user, 'user')
+        self.assertEqual(req._obvius_pass, 'pass')
+        self.assertEqual(req._obvius_port, 93)
         del req
 
     def test_signal(self):
