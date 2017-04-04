@@ -4,6 +4,7 @@ pipes:
     rethink_ip:    localhost
     rethink_port:  28015
     rethink_table: devices
+    clean_delay:   30
 devices:
   - scheduler:
       $:           SimpleDelayScheduler
@@ -19,6 +20,7 @@ devices:
       type:        FLOW
       lat:         -12.3
       lon:         12.3
+      ttl:         30
 
   - scheduler:
       $:           SimpleDelayScheduler
@@ -34,6 +36,7 @@ devices:
       type:        FLOW
       lat:         -12.3
       lon:         12.3
+      ttl:         30
 
   # - scheduler:
   #     $:           SimpleDelayScheduler

@@ -15,6 +15,7 @@ rethinkdb.py
 """
 
 import time
+import threading
 from typing import List
 
 from .. import const
@@ -28,16 +29,27 @@ class RethinkDBPipe(AbstractPipe):
 
     def __init__(
         self, rethink_ip: str, rethink_port: int, rethink_table: str,
-        record_size: int=10
+        clean_delay: int=300
     ):
         (self._rethink_ip, self._rethink_port) = (rethink_ip, rethink_port)
         self._rethink_table = rethink_table
-        (self._record_list, self._record_size,) = ([], record_size,)
+        (self._last_cleaned, self._clean_delay) = (0, clean_delay)
 
         if self._rethink_table not in rethinkdb.table_list()\
                 .run(self.connection):
             rethinkdb.table_create(self._rethink_table).run(self.connection)
         self.table = rethinkdb.table(self._rethink_table)
+
+        self._cleaning_thread = threading.Thread(
+            target=self._cleaning_scheduler,
+            args=(self._clean_delay,)
+        )
+        self._cleaning_thread.daemon = True
+        const.log.info((
+            'starting `{self}` cleaning thread as daemon '
+            'on `{self._clean_delay}` second delay ...'
+        ).format(self=self))
+        self._cleaning_thread.start()
 
     def __repr__(self):
         return ((
@@ -67,8 +79,26 @@ class RethinkDBPipe(AbstractPipe):
             ).format(self=self, exc=exc))
             raise exc
 
+    def _cleaning_scheduler(self, delay: float) -> None:
+        while True:
+            self.clean()
+            time.sleep(delay)
+
     def accept(self, record: Record) -> None:
         self.commit([record])
+
+    def clean(self) -> None:
+        const.log.debug((
+            'cleaning expired records from `{self.table}` ...'
+        ).format(self=self))
+        deletion_results = self.table.filter(lambda record: (
+            record['timestamp'] + record['ttl']
+        ) <= time.time()).delete().run(self.connection)
+        const.log.debug((
+            'cleaned `{deleted_count}` records from `{self.table}` ...'
+        ).format(self=self, deleted_count=deletion_results['deleted']))
+        self._last_cleaned = time.time()
+        return deletion_results['deleted']
 
     def validate(self) -> bool:
         try:

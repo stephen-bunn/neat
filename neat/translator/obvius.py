@@ -14,6 +14,7 @@ Obvius.py
 .. moduleauthor:: Stephen Bunn <r>
 """
 
+import time
 import importlib
 
 from .. import const
@@ -175,9 +176,7 @@ class ObviusTranslator(AbstractTranslator):
                 record = Record(**meta)
                 record.device_name = device.find('name').text
                 for rec in device.find_all('record'):
-                    record.timestamp = dateutil.parser.parse(
-                        rec.find('time').text
-                    ).timestamp()
+                    record.timestamp = time.time()
                     rec_error = rec.find('error').text
                     for point in sorted(
                         rec.find_all('point'),

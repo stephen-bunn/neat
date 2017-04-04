@@ -25,8 +25,12 @@ from .translator._common import AbstractTranslator
 from .pipe._common import AbstractPipe
 from .translator import get_translator
 
+import blinker
+
 
 class Engine(object):
+    on_start = blinker.Signal()
+    on_stop = blinker.Signal()
 
     def __init__(
         self,
@@ -88,6 +92,7 @@ class Engine(object):
                 piper.accept(record)
 
     def start(self) -> None:
+        self.on_start.send(self)
         const.log.info((
             'starting engine with `{self._cpu_count}` cpus for '
             '`{self.register}` ...'
@@ -111,6 +116,7 @@ class Engine(object):
             ).format(scheduler=scheduler, requester=requester))
 
     def stop(self) -> None:
+        self.on_stop.send(self)
         const.log.info((
             'stopping engine and scheduler threads with pids '
             '{scheduler_pids} ...'

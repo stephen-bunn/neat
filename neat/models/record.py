@@ -140,6 +140,15 @@ class Record(AbstractModel):
         self._timestamp = int(timestamp)
 
     @property
+    def ttl(self) -> int:
+        if hasattr(self, '_ttl'):
+            return self._ttl
+
+    @ttl.setter
+    def ttl(self, ttl: int) -> None:
+        self._ttl = int(ttl)
+
+    @property
     def type(self):
         if hasattr(self, '_device_type'):
             return self._device_type
@@ -189,5 +198,6 @@ class Record(AbstractModel):
                 'lon': self.lon,
                 'lat': self.lat
             },
+            'ttl': self.ttl,
             '$meta': self._meta
         }

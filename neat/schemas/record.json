@@ -26,6 +26,9 @@
     "timestamp": {
       "type": "integer"
     },
+    "ttl": {
+      "type": "integer"
+    },
     "type": {
       "type": "string"
     },
@@ -81,6 +84,7 @@
     "type": "object"
   },
   "required": [
+    "ttl",
     "name",
     "device_name",
     "coord",
