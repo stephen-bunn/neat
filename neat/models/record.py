@@ -13,7 +13,7 @@ record.py
 .. moduleauthor:: Stephen Bunn <r>
 """
 
-from typing import List
+from typing import List, Dict
 
 from .. import const
 from ._common import AbstractModel
@@ -70,10 +70,11 @@ class RecordPoint(object):
 
     def to_dict(self) -> dict:
         data = {
-            'name': self.name,
             'value': self.value,
             'unit': self.unit
         }
+        if hasattr(self, '_name'):
+            data['name'] = self.name
         if hasattr(self, '_number'):
             data['number'] = self.number
         return data
@@ -158,21 +159,21 @@ class Record(AbstractModel):
         self._device_type = device_type
 
     @property
-    def data(self) -> List[RecordPoint]:
+    def data(self) -> Dict[int, RecordPoint]:
         if hasattr(self, '_data'):
             return self._data
 
     @data.setter
-    def data(self, data: List[RecordPoint]) -> None:
+    def data(self, data: Dict[int, RecordPoint]) -> None:
         self._data = data
 
     @property
-    def parsed(self) -> List[RecordPoint]:
+    def parsed(self) -> Dict[str, RecordPoint]:
         if hasattr(self, '_parsed'):
             return self._parsed
 
     @parsed.setter
-    def parsed(self, parsed: List[RecordPoint]) -> None:
+    def parsed(self, parsed: Dict[str, RecordPoint]) -> None:
         self._parsed = parsed
 
     def validate(self) -> bool:
@@ -192,8 +193,14 @@ class Record(AbstractModel):
             'device_name': self.device_name,
             'type': self.type,
             'timestamp': self.timestamp,
-            'data': [point.to_dict() for point in self.data],
-            'parsed': [point.to_dict() for point in self.parsed],
+            'data': {
+                str(point_number): record_point.to_dict()
+                for (point_number, record_point) in self.data.items()
+            },
+            'parsed': {
+                point_name: record_point.to_dict()
+                for (point_name, record_point) in self.parsed.items()
+            },
             'coord': {
                 'lon': self.lon,
                 'lat': self.lat

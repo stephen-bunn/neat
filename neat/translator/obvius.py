@@ -17,7 +17,7 @@ Obvius.py
 import time
 import importlib
 
-from .. import const
+from .. import const, device
 from ..models import Record, RecordPoint
 from ._common import AbstractTranslator
 
@@ -172,29 +172,59 @@ class ObviusTranslator(AbstractTranslator):
     def translate(self, data: str, meta: dict={}) -> None:
         if self.validate(data):
             soup = bs4.BeautifulSoup(data, self.parser)
-            for device in soup.find_all('devices'):
+            for device_record in soup.find_all('devices'):
+                # prepopulate the Record with meta fields that match
                 record = Record(**meta)
-                record.device_name = device.find('name').text
-                for rec in device.find_all('record'):
-                    record.timestamp = time.time()
-                    rec_error = rec.find('error').text
-                    for point in sorted(
-                        rec.find_all('point'),
-                        key=lambda x: int(x.attrs['number'])
-                    ):
-                        try:
-                            rec_point_value = float(point.attrs['value'])
-                        except ValueError:
-                            rec_point_value = None
-                        try:
-                            self.unit_map[point.attrs['units']]
-                        except KeyError:
-                            point.attrs['units'] = ''
-                        record.data.append(RecordPoint(
-                            number=int(point.attrs['number']),
-                            name=point.attrs['name'],
-                            value=rec_point_value,
-                            unit=str(self.unit_map[point.attrs['units']].units)
-                        ))
+                if not record.type or len(record.type) <= 0:
+                    const.log.warning((
+                        'no device type for `{record}`, '
+                        'default set to {device.DeviceType.UNKNOWN} ...'
+                    ).format(record=record, device=device))
+                    record.type = device.DeviceType.UNKNOWN.name
+                try:
+                    # discover device type
+                    device_type = device.DeviceType[record.type]
+                    record.device_name = device_record.find('name').text
+                    for rec in device_record.find_all('record'):
+                        record.timestamp = time.time()
+                        rec_error = rec.find('error').text
+                        record_data = {}
+                        for point in sorted(
+                            rec.find_all('point'),
+                            key=lambda x: int(x.attrs['number'])
+                        ):
+                            # discover valid point values and units
+                            try:
+                                rec_point_value = float(point.attrs['value'])
+                            except ValueError:
+                                rec_point_value = None
+                            try:
+                                self.unit_map[point.attrs['units']]
+                            except KeyError:
+                                point.attrs['units'] = ''
 
-                self.signal.send(record)
+                            # add generated RecordPoint to record_data
+                            record_data[
+                                int(point.attrs['number'])
+                            ] = RecordPoint(
+                                name=point.attrs['name'],
+                                value=rec_point_value,
+                                unit=str(self.unit_map[
+                                    point.attrs['units']
+                                ].units)
+                            )
+
+
+                        # try and parse record data into reliable parsed data
+                        record.data = record_data
+                        (device_type_id, device_instance,) = device_type.value
+                        record.parsed = device_instance.parse(record)
+                        # record.parsed = {}
+                    # send the generated record out to the engine
+                    self.signal.send(record)
+                except KeyError as exc:
+                    const.log.error((
+                        'invalid device type `{exc.args[0]}` for '
+                        'record `{record}`, discarding record ...'
+                    ).format(exc=exc, record=record))
+                    break
