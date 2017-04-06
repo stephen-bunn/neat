@@ -37,9 +37,9 @@ class ObviusTranslator(AbstractTranslator):
         'VAh': 'volt_ampere * hour',
         'kVAh': 'kilovolt_ampere * hour',
         'MVAh': 'megavolt_ampere * hour',
-        'VARh': '',
-        'kVARh': '',
-        'MVARh': '',
+        'VARh': 'volt_ampere * hour',
+        'kVARh': 'kilovolt_ampere * hour',
+        'MVARh': 'megavolt_ampere * hour',
         'Btu': 'btu',
         'kBtu': 'kilobtu',
         'MBtu': 'megabtu',
@@ -55,9 +55,9 @@ class ObviusTranslator(AbstractTranslator):
         'VA': 'volt_ampere',
         'kVA': 'kilovolt_ampere',
         'MVA': 'megavolt_ampere',
-        'VAR': '',
-        'kVAR': '',
-        'MVAR': '',
+        'VAR': 'volt_ampere',
+        'kVAR': 'kilovolt_ampere',
+        'MVAR': 'megavolt_ampere',
         'Btu/hr': 'btu/hr',
         # voltage
         'Volts': 'volt',
@@ -95,6 +95,7 @@ class ObviusTranslator(AbstractTranslator):
         'Cubic Feet/sec': 'foot ** 3/second',
         'Cubic Feet/min': 'foot ** 3/minute',
         'CFm': 'foot ** 3/minute',
+        'CFM': 'foot ** 3/minute',
         'Cubic Feet/hr': 'foot ** 3/hour',
         'CFH': 'foot ** 3/hour',
         'Cubic Meters/hr': 'meter ** 3 / hour',
@@ -214,12 +215,10 @@ class ObviusTranslator(AbstractTranslator):
                                 ].units)
                             )
 
-
                         # try and parse record data into reliable parsed data
                         record.data = record_data
                         (device_type_id, device_instance,) = device_type.value
                         record.parsed = device_instance.parse(record)
-                        # record.parsed = {}
                     # send the generated record out to the engine
                     self.signal.send(record)
                 except KeyError as exc:

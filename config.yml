@@ -4,43 +4,43 @@ pipes:
     rethink_ip:    localhost
     rethink_port:  28015
     rethink_table: devices
-    clean_delay:   30
+    clean_delay:   300
 devices:
   - scheduler:
       $:           SimpleDelayScheduler
       delay:       10.0
     requester:
       $:           ObviusRequester
-      device_id:   17
+      device_id:   117
       obvius_ip:   152.10.6.240
       obvius_port: 80
       obvius_user: user
       obvius_pass: ASUREI
-      name:        flow.1
-      type:        FLOW
+      name:        solar_therm.1
+      type:        SOLAR_THERM
       lat:         -12.3
       lon:         12.3
-      ttl:         30
-      parsed:
-        energy_rate:
-          number: 0
-          unit: btu / hour
-        flow_rate:
-          number: 1
-          unit: gallon / minute
-        supply_temp:
-          number: 3
-          unit: degF
-        return_temp:
-          number: 4
-          unit: degF
+      ttl:         300
+      # parsed:
+      #   energy_rate:
+      #     number: 0
+      #     unit: btu / hour
+      #   flow_rate:
+      #     number: 1
+      #     unit: gallon / minute
+      #   supply_temp:
+      #     number: 3
+      #     unit: degF
+      #   return_temp:
+      #     number: 4
+      #     unit: degF
 
   # - scheduler:
   #     $:           SimpleDelayScheduler
   #     delay:       10.0
   #   requester:
   #     $:           ObviusRequester
-  #     device_id:   18
+  #     device_id:   17
   #     obvius_ip:   152.10.6.240
   #     obvius_port: 80
   #     obvius_user: user
@@ -49,8 +49,8 @@ devices:
   #     type:        FLOW
   #     lat:         -12.3
   #     lon:         12.3
-  #     ttl:         30
-
+  #     ttl:         300
+  #
   # - scheduler:
   #     $:           SimpleDelayScheduler
   #     delay:       10.0
@@ -65,6 +65,7 @@ devices:
   #     type:        FLOW
   #     lat:         -12.3
   #     lon:         12.3
+  #     ttl:         300
   #
   # - scheduler:
   #     $:           SimpleDelayScheduler
@@ -80,6 +81,7 @@ devices:
   #     type:        FLOW
   #     lat:         -12.3
   #     lon:         12.3
+  #     ttl:         300
   #
   # - scheduler:
   #     $:           SimpleDelayScheduler
@@ -95,6 +97,7 @@ devices:
   #     type:        PV
   #     lat:         -12.3
   #     lon:         12.3
+  #     ttl:         300
   #
   # - scheduler:
   #     $:           SimpleDelayScheduler
@@ -110,6 +113,7 @@ devices:
   #     type:        ENERGY
   #     lat:         -12.3
   #     lon:         12.3
+  #     ttl:         300
   #
   # - scheduler:
   #     $:           SimpleDelayScheduler
@@ -125,6 +129,7 @@ devices:
   #     type:        SOLAR_THERM
   #     lat:         -12.3
   #     lon:         12.3
+  #     ttl:         300
   #
   # - scheduler:
   #     $:           SimpleDelayScheduler

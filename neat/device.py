@@ -83,24 +83,22 @@ class HVACDevice(AbstractDevice):
 
 class SolarThermalDevice(AbstractDevice):
     name = 'Solar Thermal Device'
-    fields = {}
+    fields = {
+        'energy_rate': 'btu / hour',
+        'flow_rate': 'gallon / minute',
+        'supply_temp': 'degF',
+        'return_temp': 'degF',
+        'total_energy': 'megabtu'
+    }
 
 
 class WindDevice(AbstractDevice):
     name = 'Wind Device'
     fields = {
+        'inverter_real': 'kilowatt',
+        'inverter_energy_total': 'kilowatthour',
         'rotor_speed': 'rpm',
         'wind_speed': 'mph'
-    }
-
-
-class FlowDevice(AbstractDevice):
-    name = 'Flow Device'
-    fields = {
-        'energy_rate': 'btu / hour',
-        'flow_rate': 'gallon / minute',
-        'supply_temp': 'degF',
-        'return_temp': 'degF'
     }
 
 
@@ -123,6 +121,5 @@ class DeviceType(enum.Enum):
     HVAC        = (0x2, HVACDevice())
     SOLAR_THERM = (0x3, SolarThermalDevice())
     WIND        = (0x4, WindDevice())
-    FLOW        = (0x5, FlowDevice())
-    ENERGY      = (0x6, EnergyDevice())
-    TEMP        = (0x7, TemperatureDevice())
+    ENERGY      = (0x5, EnergyDevice())
+    TEMP        = (0x6, TemperatureDevice())
