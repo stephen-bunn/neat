@@ -28,17 +28,17 @@ import rethinkdb
 class RethinkDBPipe(AbstractPipe):
 
     def __init__(
-        self, rethink_ip: str, rethink_port: int, rethink_table: str,
+        self, ip: str, port: int, table: str,
         clean_delay: int=300
     ):
-        (self._rethink_ip, self._rethink_port) = (rethink_ip, rethink_port)
-        self._rethink_table = rethink_table
+        (self._ip, self._port) = (ip, port)
+        self._table_name = table
         (self._last_cleaned, self._clean_delay) = (0, clean_delay)
 
-        if self._rethink_table not in rethinkdb.table_list()\
+        if self._table_name not in rethinkdb.table_list()\
                 .run(self.connection):
-            rethinkdb.table_create(self._rethink_table).run(self.connection)
-        self.table = rethinkdb.table(self._rethink_table)
+            rethinkdb.table_create(self._table_name).run(self.connection)
+        self.table = rethinkdb.table(self._table_name)
 
         self._cleaning_thread = threading.Thread(
             target=self._cleaning_scheduler,
@@ -74,8 +74,7 @@ class RethinkDBPipe(AbstractPipe):
         except rethinkdb.errors.ReqlDriverError as exc:
             const.log.error((
                 'could not connect to rethinkdb server at '
-                '`{self._rethink_ip}:{self._rethink_port}`, '
-                '{exc.message} ...'
+                '`{self._ip}:{self._port}`, {exc.message} ...'
             ).format(self=self, exc=exc))
             raise exc
 
@@ -85,7 +84,11 @@ class RethinkDBPipe(AbstractPipe):
             time.sleep(delay)
 
     def accept(self, record: Record) -> None:
-        self.commit([record])
+        const.log.debug((
+            'commiting `{record}` records into `{self}` ...'
+        ).format(self=self, record=record))
+        self.table.insert(record.to_dict()).run(self.connection)
+        self.signal.send(self, record=record)
 
     def clean(self) -> None:
         const.log.debug((
@@ -107,10 +110,3 @@ class RethinkDBPipe(AbstractPipe):
         except rethinkdb.errors.ReqlDriverError as exc:
             pass
         return False
-
-    def commit(self, records: List[Record]) -> None:
-        const.log.debug((
-            'commiting `{records_len}` records into rethinkdb `{self}` ...'
-        ).format(self=self, records_len=len(records)))
-        self.table.insert([record.to_dict() for record in records])\
-            .run(self.connection)

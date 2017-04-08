@@ -14,3 +14,4 @@ __init__.py
 """
 
 from .rethinkdb import RethinkDBPipe
+from .mongodb import MongoDBPipe

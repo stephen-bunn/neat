@@ -18,17 +18,16 @@ from typing import List
 
 from ..models import Record
 
+import blinker
+
 
 class AbstractPipe(object, metaclass=abc.ABCMeta):
+    signal = blinker.Signal()
 
     @abc.abstractmethod
-    def accept(self, records: Record) -> None:
+    def accept(self, record: Record) -> None:
         raise NotImplementedError()
 
     @abc.abstractmethod
     def validate(self) -> bool:
-        raise NotImplementedError()
-
-    @abc.abstractmethod
-    def commit(self, records: List[Record]) -> None:
         raise NotImplementedError()
