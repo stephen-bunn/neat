@@ -57,9 +57,9 @@ class AbstractDevice(object, metaclass=abc.ABCMeta):
                     record_parsed[req_name]
                 except KeyError as exc:
                     const.log.warning((
-                        'missing required specification for parsed field '
-                        '`{req_name}`, setting to empty record point ...'
-                    ).format(req_name=req_name))
+                        '`{record}` missing required specification for parsed '
+                        'field `{req_name}`, setting to empty record point ...'
+                    ).format(record=record, req_name=req_name))
                     record_parsed[req_name] = RecordPoint(
                         value=None, unit='dimensionless'
                     )

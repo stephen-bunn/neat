@@ -91,6 +91,11 @@ class Engine(object):
             for piper in self.pipes:
                 piper.accept(record)
 
+    def on_commit(self, piper: AbstractPipe, record: Record) -> None:
+        const.log.debug((
+            'pipe `{piper}` successfully handled record `{record}` ...'
+        ).format(piper=piper, record=record))
+
     def start(self) -> None:
         self.on_start.send(self)
         const.log.info((
@@ -105,6 +110,11 @@ class Engine(object):
                     'removing from pipes ...'
                 ).format(piper=piper))
                 self.pipes.remove(piper)
+            else:
+                const.log.debug((
+                    'utilizing pipe `{piper}` ...'
+                ).format(piper=piper))
+                piper.signal.connect(self.on_commit)
 
         for (scheduler, requester) in self.register.items():
             scheduler.signal.connect(self.on_scheduled)

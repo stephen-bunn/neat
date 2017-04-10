@@ -1,21 +1,22 @@
 ---
 pipes:
-  - $:           RethinkDBPipe
-    ip:          localhost
-    port:        28015
-    table:       devices
-    clean_delay: 300
+  # - $:           RethinkDBPipe
+  #   ip:          localhost
+  #   port:        28015
+  #   table:       devices
+  #   clean_delay: 300
   - $:           MongoDBPipe
     ip:          localhost
     port:        27017
     table:       devices
+    entry_delay: 100
 devices:
   - scheduler:
       $:           SimpleDelayScheduler
       delay:       10.0
     requester:
       $:           ObviusRequester
-      device_id:   117
+      device_id:   50
       obvius_ip:   152.10.6.240
       obvius_port: 80
       obvius_user: user

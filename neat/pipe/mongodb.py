@@ -13,6 +13,8 @@ mongodb.py
 .. moduleauthor:: Stephen Bunn <r>
 """
 
+import time
+
 from .. import const
 from ..models import Record
 from ._common import AbstractPipe
@@ -22,10 +24,10 @@ import pymongo
 
 class MongoDBPipe(AbstractPipe):
 
-    def __init__(self, ip: str, port: int, table: str):
+    def __init__(self, ip: str, port: int, table: str, entry_delay: int=600):
         (self._ip, self._port) = (ip, port)
         self._table_name = table
-        self.client
+        (self._entry_register, self._entry_delay) = ({}, entry_delay)
 
     def __repr__(self):
         return ((
@@ -61,12 +63,33 @@ class MongoDBPipe(AbstractPipe):
 
     def accept(self, record: Record) -> None:
         const.log.debug((
-            'commiting `{record}` records into `{self}` ...'
+            'handling `{record}` with `{self}` ...'
         ).format(self=self, record=record))
-        self.table.insert_one({
-            (k[1:] if k.startswith('$') else k): v
-            for (k, v) in record.to_dict().items()
-        })
+        last_write = time.time()
+        insert = False
+        try:
+            last_write = (time.time() - self._entry_register[record.name])
+            if last_write >= self._entry_delay:
+                insert = True
+        except KeyError as exc:
+            self._entry_register[record.name] = time.time()
+            insert = True
+        if insert:
+            const.log.debug((
+                'commiting `{record}` records into `{self}` ...'
+            ).format(self=self, record=record))
+            self.table.insert_one({
+                (k[1:] if k.startswith('$') else k): v
+                for (k, v) in record.to_dict().items()
+            })
+        else:
+            const.log.debug((
+                'dropping `{record}` for `{self}`, time till next write is '
+                '`{next_write}` seconds ...'
+            ).format(
+                self=self, record=record,
+                next_write=(self._entry_delay - last_write)
+            ))
         self.signal.send(self, record=record)
 
     def validate(self) -> bool:
