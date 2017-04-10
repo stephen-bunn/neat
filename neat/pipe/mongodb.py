@@ -79,7 +79,7 @@ class MongoDBPipe(AbstractPipe):
                 'commiting `{record}` records into `{self}` ...'
             ).format(self=self, record=record))
             self.table.insert_one({
-                (k[1:] if k.startswith('$') else k): v
+                (k.replace('$', '') if k.startswith('$') else k): v
                 for (k, v) in record.to_dict().items()
             })
         else:
