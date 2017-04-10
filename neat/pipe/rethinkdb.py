@@ -53,8 +53,7 @@ class RethinkDBPipe(AbstractPipe):
 
     def __repr__(self):
         return ((
-            '<{self.__class__.__name__} '
-            '({self._rethink_ip}:{self._rethink_port})>'
+            '<{self.__class__.__name__} ({self._ip}:{self._port})>'
         ).format(self=self))
 
     @property
@@ -63,7 +62,7 @@ class RethinkDBPipe(AbstractPipe):
         # For this reason, a new connection must be initalized on each request
         try:
             connection = rethinkdb.connect(
-                self._rethink_ip, self._rethink_port,
+                self._ip, self._port,
                 db=const.module_name
             )
             if const.module_name not in rethinkdb.db_list()\

@@ -25,18 +25,20 @@ class MongoDBPipe(AbstractPipe):
     def __init__(self, ip: str, port: int, table: str):
         (self._ip, self._port) = (ip, port)
         self._table_name = table
+        self.client
 
     def __repr__(self):
         return ((
-            '<{self.__class__.__name__} '
-            '({self._mongo_ip}:{self._mongo_port})>'
+            '<{self.__class__.__name__} ({self._ip}:{self._port})>'
         ).format(self=self))
 
     @property
     def client(self) -> pymongo.MongoClient:
         if not hasattr(self, '_client'):
             try:
-                self._client = pymongo.MongoClient(self._ip, self._port)
+                self._client = pymongo.MongoClient(
+                    self._ip, self._port, connect=False
+                )
             except pymongo.errors.ConnectionFailure as exc:
                 const.log.error((
                     'could not connect to mongodb server at '
@@ -61,12 +63,15 @@ class MongoDBPipe(AbstractPipe):
         const.log.debug((
             'commiting `{record}` records into `{self}` ...'
         ).format(self=self, record=record))
-        self.table.insert_one(record.to_dict())
+        self.table.insert_one({
+            (k[1:] if k.startswith('$') else k): v
+            for (k, v) in record.to_dict().items()
+        })
         self.signal.send(self, record=record)
 
     def validate(self) -> bool:
         try:
-            self.connection
+            self.client
             return True
         except pymongo.errors.ConnectionFailure as exc:
             pass
