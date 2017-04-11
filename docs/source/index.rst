@@ -7,6 +7,7 @@ Welcome to NEAT's documentation!
   :maxdepth: 2
   :caption: Contents:
 
+  introductions
   getting-started
   neat
 
