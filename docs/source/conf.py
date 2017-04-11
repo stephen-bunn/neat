@@ -23,7 +23,6 @@ sys.path.insert(0, os.path.realpath(os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
     '../../'
 )))
-print(sys.path)
 
 # -- General configuration ------------------------------------------------
 
@@ -55,7 +54,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'NEAT'
-copyright = '2017, Sierra Milosh, Stephen Bunn, Nathan Davis, James Ward'
+copyright = '2017, Sierra Milosh, Stephen Bunn'
 author = 'Sierra Milosh, Stephen Bunn, Nathan Davis, James Ward'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -163,4 +162,4 @@ texinfo_documents = [
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {'https://docs.python.org/3.6': None}
