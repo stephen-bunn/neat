@@ -4,7 +4,6 @@
 # Copyright (c) 2017 Stephen Bunn (stephen@bunn.io)
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
 
-import multiprocessing
 from typing import Dict, List
 
 from . import const
@@ -19,6 +18,9 @@ import blinker
 
 
 class Engine(object):
+    """ Provides communication between all of the subpackages.
+    """
+
     on_start = blinker.Signal()
     on_stop = blinker.Signal()
 
@@ -26,30 +28,49 @@ class Engine(object):
         self,
         register: Dict[AbstractScheduler, AbstractRequester]={},
         pipes: List[AbstractPipe]=[],
-        cpu_count: int=None
     ):
+        """ Initializes an instance of the engine.
+
+        :param register: A dictionary of schedulers mapped to requesters
+        :type register: dict
+        :param pipes: A list of pipes that should be used for records
+        :type pipes: list
+        """
+
         self._register = register
         self._pipes = pipes
-        self._cpu_count = (
-            multiprocessing.cpu_count()
-            if not cpu_count or not isinstance(cpu_count, int) else
-            cpu_count
-        )
         self._translators = {}
 
     @property
     def register(self) -> Dict[AbstractScheduler, AbstractRequester]:
+        """ The mapping of schedulers to requesters.
+        """
+
         return self._register
 
     @property
     def translators(self) -> List[AbstractTranslator]:
+        """ The list of translator objects that have been needed.
+        """
+
         return self._translators
 
     @property
     def pipes(self) -> List[AbstractPipe]:
+        """ The list of pipe objects that are handling created records.
+        """
+
         return self._pipes
 
     def on_scheduled(self, scheduler: AbstractScheduler) -> None:
+        """ Event handler for when schedulers trigger their mapped requesters.
+
+        :param scheduler: The scheduler that needs to run its requester
+        :type scheduler: AbstractScheduler
+        :returns: Does not return
+        :rtype: None
+        """
+
         const.log.debug((
             'scheduled request from scheduler `{scheduler}` ...'
         ).format(scheduler=scheduler))
@@ -59,6 +80,18 @@ class Engine(object):
         self,
         requester: AbstractRequester, data: str, meta: dict
     ) -> None:
+        """ Event handler for when requesters get a response from their device.
+
+        :param requester: The requester who retrieved the data
+        :type requester: AbstractRequester
+        :param data: The data returned from the device
+        :type data: str
+        :param meta: Any additional fields required to properly interpret data
+        :type meta: dict
+        :returns: Does not return
+        :rtype: None
+        """
+
         const.log.debug((
             'recieved data from requester `{requester}` ...'
         ).format(requester=requester, data=data))
@@ -70,6 +103,14 @@ class Engine(object):
         self.translators[requester_name].translate(data, meta=meta)
 
     def on_record(self, record: Record) -> None:
+        """ Event handler for when translators finish translation of some data.
+
+        :param record: The translated record
+        :type record: Record
+        :returns: Does not return
+        :rtype: None
+        """
+
         if not record.validate():
             const.log.error((
                 'invalid record recieved `{record}` ...'
@@ -82,16 +123,27 @@ class Engine(object):
                 piper.accept(record)
 
     def on_commit(self, piper: AbstractPipe, record: Record) -> None:
+        """ Event handler for when pipes finish writing out a record.
+
+        :param piper: The pipe who wrote the record out
+        :type piper: AbstractPipe
+        :param record: The record that was written
+        :type record: Record
+        :returns: Does not return
+        :rtype: None
+        """
         const.log.debug((
             'pipe `{piper}` successfully handled record `{record}` ...'
         ).format(piper=piper, record=record))
 
     def start(self) -> None:
+        """ Starts the engine.
+
+        :returns: Does not return
+        :rtype: None
+        """
+
         self.on_start.send(self)
-        const.log.info((
-            'starting engine with `{self._cpu_count}` cpus for '
-            '`{self.register}` ...'
-        ).format(self=self))
 
         for piper in self.pipes:
             if not piper.validate():
@@ -116,7 +168,12 @@ class Engine(object):
             ).format(scheduler=scheduler, requester=requester))
 
     def stop(self) -> None:
-        self.on_stop.send(self)
+        """ Stops the engine.
+
+        :returns: Does not return
+        :rtype: None
+        """
+
         const.log.info((
             'stopping engine and scheduler threads with pids '
             '{scheduler_pids} ...'
@@ -128,3 +185,4 @@ class Engine(object):
                 '`{scheduler.pid}` is terminated ...'
             ).format(scheduler=scheduler))
             scheduler.terminate()
+        self.on_stop.send(self)

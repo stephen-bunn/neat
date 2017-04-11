@@ -64,7 +64,7 @@ class BasicClient(AbstractClient):
         if os.path.isfile(config):
             with open(config, 'r') as fp:
                 try:
-                    return Client(yaml.load(fp))
+                    return BasicClient(yaml.load(fp))
                 except yaml.YAMLError as exc:
                     const.log.error((
                         'client failed loading from config at `{config}`, '
