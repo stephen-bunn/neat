@@ -1,18 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 #
-# Copyright (c) 2017 NEAT Team
+# Copyright (c) 2017 Stephen Bunn (stephen@bunn.io)
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
-
-"""
-_example.py
-.. module:: neat.tests
-    :platform: Linux, MacOSX, Win32
-    :synopsis:
-    :created: 01-28-2017 14:07:31
-    :modified: 01-28-2017 14:07:31
-.. moduleauthor:: NEAT Team
-"""
 
 import unittest
 

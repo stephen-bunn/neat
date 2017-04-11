@@ -1,20 +1,11 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 #
-# Copyright (c) 2017 Stephen Bunn <r>
+# Copyright (c) 2017 Stephen Bunn (stephen@bunn.io)
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
 
-"""
-client.py
-.. module:: modman
-    :platform: Linux, MacOSX, Win32
-    :synopsis:
-    :created: 02-24-2017 10:34:23
-    :modified: 02-24-2017 10:34:23
-.. moduleauthor:: Stephen Bunn <r>
-"""
-
 import os
+import abc
 
 from . import const
 from .engine import Engine
@@ -27,7 +18,23 @@ from . import (
 import yaml
 
 
-class Client(object):
+class AbstractClient(object, metaclass=abc.ABCMeta):
+    """ The basic class for all valid clients.
+    """
+
+    @staticmethod
+    @abc.abstractmethod
+    def from_config(config_path: str):
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def start(self) -> None:
+        raise NotImplementedError()
+
+
+class BasicClient(AbstractClient):
+    """ A very basic client for engine initalization.
+    """
 
     def __init__(self, config: dict):
         device_pairs = []

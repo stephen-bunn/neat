@@ -43,29 +43,19 @@ In addition, Python source files identify themselves using the following header.
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 #
-# Copyright (c) 2017 NEAT Team
+# Copyright (c) {{year}} {{author}} ({{contact}})
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
-
-"""
-{{filename}}
-.. module:: neat
-    :platform: Linux, MacOS, Win32
-    :synopsis:
-    :created: {{created_time}}
-    :modified: {{last_modified_time}}
-.. moduleauthor:: NEAT Team
-"""
 ```
 
 _Where the following apply:_
 
 <dl>
-  <dt><code>{{filename}}</code></dt>
-  <dd>The current file's name</dd>
-  <dt><code>{{created_time}}</code></dt>
-  <dd>The timestamp at which the file was created, following the <a href="https://momentjs.com/">Moment.js</a> format <code>MM-DD-YYYY HH:mm:ss</code></dd>
-  <dt><code>{{last_modified_time}}</code></dt>
-  <dd>The timestamp at which the file was last modified, following the <a href="https://momentjs.com/">Moment.js</a> format <code>MM-DD-YYYY HH:mm:ss</code></dd>
+  <dt><code>{{year}}</code></dt>
+  <dd>The current year of editing the file</dd>
+  <dt><code>{{author}}</code></dt>
+  <dd>The author of the file</dd>
+  <dt><code>{{contact}}</code></dt>
+  <dd>A method of contacting the author, most likely email</dd>
 </dl>
 
 We understand that this header is a pain to manually add on each commit.

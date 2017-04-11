@@ -7,9 +7,17 @@ Welcome to NEAT's documentation!
 ================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+  :maxdepth: 2
+  :caption: Contents:
 
+.. automodule:: neat
+  :synopsis: A communication framework for REI devices and database systems.
+  :platform: Linux
+  :members:
+.. moduleauthor:: Stephen Bunn (stephen@bunn.io)
+.. moduleauthor:: Sierra Milosh ()
+.. moduleauthor:: Nathan Davis ()
+.. moduleauthor:: James Ward ()
 
 
 Indices and tables

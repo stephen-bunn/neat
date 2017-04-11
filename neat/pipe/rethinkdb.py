@@ -1,18 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 #
-# Copyright (c) 2017 Stephen Bunn <r>
+# Copyright (c) 2017 Stephen Bunn (stephen@bunn.io)
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
-
-"""
-rethinkdb.py
-.. module::
-    :platform: Linux, MacOSX, Win32
-    :synopsis:
-    :created: 03-17-2017 21:56:00
-    :modified: 03-17-2017 21:56:00
-.. moduleauthor:: Stephen Bunn <r>
-"""
 
 import time
 import threading

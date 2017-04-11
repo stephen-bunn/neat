@@ -1,17 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 #
-# Copyright (c) 2017 Stephen Bunn <r>
+# Copyright (c) 2017 Stephen Bunn (stephen@bunn.io)
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
-
-"""
-record.py
-    :platform: Linux, MacOSX, Win32
-    :synopsis:
-    :created: 03-07-2017 16:05:02
-    :modified: 03-07-2017 16:05:02
-.. moduleauthor:: Stephen Bunn <r>
-"""
 
 from typing import List, Dict
 

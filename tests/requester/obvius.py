@@ -1,18 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 #
-# Copyright (c) 2017 Stephen Bunn <r>
+# Copyright (c) 2017 Stephen Bunn (stephen@bunn.io)
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
-
-"""
-Obvius.py
-.. module:: neat
-    :platform: Linux, MacOSX, Win32
-    :synopsis:
-    :created: 02-17-2017 12:34:38
-    :modified: 02-17-2017 12:34:38
-.. moduleauthor:: Stephen Bunn <r>
-"""
 
 import logging
 import unittest

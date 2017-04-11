@@ -1,10 +1,10 @@
 ---
 pipes:
-  # - $:           RethinkDBPipe
-  #   ip:          localhost
-  #   port:        28015
-  #   table:       devices
-  #   clean_delay: 300
+  - $:           RethinkDBPipe
+    ip:          localhost
+    port:        28015
+    table:       devices
+    clean_delay: 300
   - $:           MongoDBPipe
     ip:          localhost
     port:        27017
