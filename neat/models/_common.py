@@ -7,13 +7,26 @@
 import abc
 
 
-class AbstractModel(object):
-    __metaclass__ = abc.ABCMeta
+class AbstractModel(object, metaclass=abc.ABCMeta):
+    """ The base class for all valid models.
+    """
 
     @abc.abstractmethod
     def validate(self) -> bool:
+        """ Self validates the model.
+
+        :returns: True if valid, otherwise False
+        :rtype: bool
+        """
+
         raise NotImplementedError()
 
     @abc.abstractmethod
     def to_dict(self) -> dict:
+        """ Builds a serializable representation of the model.
+
+        :returns: A serializable representation of the model
+        :rtype: dict
+        """
+
         raise NotImplementedError()

@@ -14,8 +14,18 @@ import jsonschema
 
 
 class RecordPoint(object):
+    """ A record point representation.
+
+    .. note:: Not a subclass of :class:`neat.models._common.AbstractModel`
+    """
 
     def __init__(self, **kwargs):
+        """ Initializes the record point with any preliminary fields.
+
+        :param kwargs: A dictionary of any preliminary fields
+        :type kwargs: dict
+        """
+
         self._meta = {}
         for (k, v) in kwargs.items():
             if hasattr(self, k):
@@ -25,6 +35,9 @@ class RecordPoint(object):
 
     @property
     def number(self) -> int:
+        """ The number of the record point.
+        """
+
         if hasattr(self, '_number'):
             return self._number
 
@@ -34,6 +47,9 @@ class RecordPoint(object):
 
     @property
     def name(self) -> str:
+        """ The name of the record point.
+        """
+
         if hasattr(self, '_name'):
             return self._name
 
@@ -43,6 +59,9 @@ class RecordPoint(object):
 
     @property
     def unit(self):
+        """ The pint unit expression of the record point.
+        """
+
         if hasattr(self, '_unit'):
             return self._unit
 
@@ -52,6 +71,9 @@ class RecordPoint(object):
 
     @property
     def value(self) -> float:
+        """ The value of the record point.
+        """
+
         if hasattr(self, '_value'):
             return self._value
 
@@ -60,6 +82,12 @@ class RecordPoint(object):
         self._value = value
 
     def to_dict(self) -> dict:
+        """ Builds a serializable representation of the record point.
+
+        :returns: A serializable representation of the record point
+        :rtype: dict
+        """
+
         data = {
             'value': self.value,
             'unit': self.unit
@@ -72,8 +100,16 @@ class RecordPoint(object):
 
 
 class Record(AbstractModel):
+    """ A model representation of a record.
+    """
 
     def __init__(self, **kwargs):
+        """ Initializes the record with any preliminary fields.
+
+        :param kwargs: A dictionary of any preliminary fields
+        :type kwargs: dict
+        """
+
         (self._data, self._parsed, self._meta,) = ({}, {}, {},)
         for (k, v) in kwargs.items():
             if hasattr(self, k):
@@ -82,84 +118,165 @@ class Record(AbstractModel):
                 self._meta[k] = v
 
     def __repr__(self):
+        """ A string representation of the record.
+
+        :returns: A string representation of the record
+        :rtype: str
+        """
+
         return (
             '<{self.__class__.__name__} ({self.timestamp}) "{self.name}">'
         ).format(self=self)
 
     @property
     def device_name(self) -> str:
+        """ The human readable name of the device.
+        """
+
         if hasattr(self, '_device_name'):
             return self._device_name
 
     @device_name.setter
     def device_name(self, device_name: str) -> None:
+        """ Sets the human readable name of the device.
+
+        :param device_name: The new human readable device name
+        :type device_name: str
+        """
+
         self._device_name = device_name
 
     @property
     def name(self) -> str:
+        """ The primary name of the device.
+        """
+
         if hasattr(self, '_name'):
             return self._name
 
     @name.setter
     def name(self, name: str) -> None:
+        """ Sets the primary name of the device.
+
+        :param name: The new primary name of the device
+        :type name: str
+        """
+
         self._name = name
 
     @property
     def lon(self) -> float:
+        """ The longitude of the device.
+        """
+
         if hasattr(self, '_lon'):
             return self._lon
 
     @lon.setter
     def lon(self, lon: float) -> None:
+        """ Sets the longitude of the record's device.
+
+        :param lon: The new longitude of the record's device
+        :type long: float
+        """
+
         self._lon = float(lon)
 
     @property
     def lat(self) -> float:
+        """ The latitude of the device.
+        """
+
         if hasattr(self, '_lat'):
             return self._lat
 
     @lat.setter
     def lat(self, lat: float) -> None:
+        """ Sets the latitude of the record's device.
+
+        :param lon: The new latitude of the record's device
+        :type long: float
+        """
+
         self._lat = float(lat)
 
     @property
     def timestamp(self) -> int:
+        """ The record's creation unix timestamp.
+        """
+
         if hasattr(self, '_timestamp'):
             return self._timestamp
 
     @timestamp.setter
     def timestamp(self, timestamp: int) -> None:
+        """ Sets the unix timestamp of the record.
+
+        :param timestamp: The new unix timestamp of the record
+        :type timestamp: int
+        """
+
         self._timestamp = int(timestamp)
 
     @property
     def ttl(self) -> int:
+        """ The record's time to live in seconds.
+        """
+
         if hasattr(self, '_ttl'):
             return self._ttl
 
     @ttl.setter
     def ttl(self, ttl: int) -> None:
+        """ Sets the time to live of the record.
+
+        :param ttl: The new time to live of the record
+        :type ttl: int
+        """
+
         self._ttl = int(ttl)
 
     @property
-    def type(self):
+    def type(self) -> str:
+        """ The type of the device.
+        """
+
         if hasattr(self, '_device_type'):
             return self._device_type
 
     @type.setter
-    def type(self, device_type) -> None:
+    def type(self, device_type: str) -> None:
+        """ Sets the type of the device.
+
+        :param device_type: A string of the key matching the DeviceType enum
+        :type device_type: str
+        """
+
         self._device_type = device_type
 
     @property
     def data(self) -> Dict[int, RecordPoint]:
+        """ The device's raw data points.
+        """
+
         if hasattr(self, '_data'):
             return self._data
 
     @data.setter
     def data(self, data: Dict[int, RecordPoint]) -> None:
+        """ Sets the data of the device.
+
+        :param data: A dictionary of device points to RecordPoints
+        :type data: dict
+        """
+
         self._data = data
 
     @property
     def parsed(self) -> Dict[str, RecordPoint]:
+        """ The device's parsed data points.
+        """
+
         if hasattr(self, '_parsed'):
             return self._parsed
 
@@ -168,6 +285,12 @@ class Record(AbstractModel):
         self._parsed = parsed
 
     def validate(self) -> bool:
+        """ Self validates the record.
+
+        :returns: True if valid, otherwise False
+        :rtype: bool
+        """
+
         try:
             jsonschema.validate(self.to_dict(), const.record_schema)
             return True
@@ -179,6 +302,12 @@ class Record(AbstractModel):
         return False
 
     def to_dict(self) -> dict:
+        """ Builds a serializable representation of the record.
+
+        :returns: A serializable representation of the record
+        :rtype: dict
+        """
+
         return {
             'name': self.name,
             'device_name': self.device_name,
@@ -197,5 +326,5 @@ class Record(AbstractModel):
                 'lat': self.lat
             },
             'ttl': self.ttl,
-            '$meta': self._meta
+            'meta': self._meta
         }
