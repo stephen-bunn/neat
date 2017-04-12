@@ -9,7 +9,8 @@ Introductions
 
 Who We Are
 ----------
-We are senior level students at Appalachian State University under the SSTEM NSF funded scholarship.
+
+We are two senior and two graduate level students at Appalachian State University under the SSTEM NSF funded scholarship. Each semester, we get to choose a research project to work on with other students from the SSTEM program. This semester, we chose to help create a dashboard for a student-run, student-funded group on campus called the Renewable Energy Initiaitve.
 
 
 .. image:: _static/img/sierra-milosh.jpg

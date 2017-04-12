@@ -13,7 +13,7 @@ import datetime
 
 
 class _const(object):
-    """ Module constants class.
+    """ Module constants object.
     """
 
     _module_name = 'neat'

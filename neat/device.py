@@ -15,22 +15,41 @@ import pint
 
 
 class AbstractDevice(object, metaclass=abc.ABCMeta):
+    """ The base class for all valid devices.
+    """
 
     @abc.abstractproperty
     def name(self) -> str:
+        """ The name of the device.
+        """
+
         raise NotImplementedError()
 
     @abc.abstractproperty
     def fields(self) -> Dict[str, str]:
+        """ The expected device fields.
+        """
+
         raise NotImplementedError()
 
     @property
     def ureg(self) -> pint.UnitRegistry:
+        """ The unit registry for all devices.
+        """
+
         if not hasattr(self, '_ureg'):
             self._ureg = pint.UnitRegistry(autoconvert_offset_to_baseunit=True)
         return self._ureg
 
     def parse(self, record: Record) -> Dict[str, RecordPoint]:
+        """ Parses a given record for the necessary device fields.
+
+        :param record: The record to parse
+        :type record: Record
+        :returns: A dictionary of field names mapped to record points
+        :rtype: dict
+        """
+
         record_parsed = {}
         if isinstance(record.parsed, dict) and \
                 not isinstance(self, UnknownDevice):
@@ -58,32 +77,49 @@ class AbstractDevice(object, metaclass=abc.ABCMeta):
 
 
 class UnknownDevice(AbstractDevice):
+    """ Defines an unknown device type.
+
+    .. note:: Primarily used for Obvius virtual meters
+    """
+
     name = 'Unknown Device'
     fields = {}
 
 
 class PVDevice(AbstractDevice):
+    """ Defines a photovoltaic device.
+    """
+
     name = 'PV Device'
     fields = {}
 
 
 class HVACDevice(AbstractDevice):
+    """ Defines a heating, ventilation, and cooling device.
+    """
+
     name = 'HVAC Device'
     fields = {}
 
 
 class SolarThermalDevice(AbstractDevice):
+    """ Defines a solar thermal device.
+    """
+
     name = 'Solar Thermal Device'
     fields = {
         'energy_rate': 'btu / hour',
         'flow_rate': 'gallon / minute',
         'supply_temp': 'degF',
         'return_temp': 'degF',
-        'total_energy': 'megabtu'
+        'energy_total': 'megabtu'
     }
 
 
 class WindDevice(AbstractDevice):
+    """ Defines a wind based device.
+    """
+
     name = 'Wind Device'
     fields = {
         'inverter_real': 'kilowatt',
@@ -94,17 +130,25 @@ class WindDevice(AbstractDevice):
 
 
 class EnergyDevice(AbstractDevice):
+    """ Defines a generic energy device.
+    """
+
     name = 'Energy Device'
     fields = {}
 
 
 class TemperatureDevice(AbstractDevice):
+    """ Defines a generic temperature device.
+    """
+
     name = 'Temperature Device'
     fields = {}
 
 
 class DeviceType(enum.Enum):
     """ An enumeration of available device types.
+
+    .. note:: Maps types to instances not classes
     """
 
     UNKNOWN     = (0x0, UnknownDevice())
