@@ -17,7 +17,7 @@ class _const(object):
     """
 
     _module_name = 'neat'
-    _version = (0, 0, 0,)
+    _version = {'major': 0, 'minor': 0, 'patch': 0}
     _authors = (
         'Stephen Bunn <stephen@bunn.io>',
         'Sierra Milosh <miloshsr1@appstate.edu>',
@@ -99,11 +99,25 @@ class _const(object):
         return self._module_name
 
     @property
+    def version_info(self) -> dict:
+        """ The version structure of the module.
+        """
+
+        return self._version
+
+    @property
     def version(self) -> tuple:
         """ The version of the module.
         """
 
-        return self._version
+        return '{major}.{minor}.{patch}'.format(**self.version_info)
+
+    @property
+    def authors(self) -> tuple:
+        """ The authors of the module.
+        """
+
+        return self._authors
 
     @property
     def base_dir(self) -> str:

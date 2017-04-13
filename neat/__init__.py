@@ -14,3 +14,7 @@ from . import (
     translator,
     pipe,
 )
+
+__name__ = const.module_name
+__version__ = const.version
+__authors__ = const.authors

@@ -16,7 +16,7 @@ devices:
       delay:       10.0
     requester:
       $:           ObviusRequester
-      device_id:   50
+      device_id:   18
       obvius_ip:   152.10.6.240
       obvius_port: 80
       obvius_user: user
@@ -26,19 +26,22 @@ devices:
       lat:         -12.3
       lon:         12.3
       ttl:         300
-      # parsed:
-      #   energy_rate:
-      #     number: 0
-      #     unit: btu / hour
-      #   flow_rate:
-      #     number: 1
-      #     unit: gallon / minute
-      #   supply_temp:
-      #     number: 3
-      #     unit: degF
-      #   return_temp:
-      #     number: 4
-      #     unit: degF
+      parsed:
+        energy_total:
+          number: 5
+          unit: btu
+        energy_rate:
+          number: 0
+          unit: btu / hour
+        flow_rate:
+          number: 1
+          unit: gallon / minute
+        supply_temp:
+          number: 3
+          unit: degF
+        return_temp:
+          number: 4
+          unit: degF
 
   # - scheduler:
   #     $:           SimpleDelayScheduler

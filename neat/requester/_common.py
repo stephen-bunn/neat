@@ -12,11 +12,15 @@ import blinker
 class AbstractRequester(object, metaclass=abc.ABCMeta):
     """ The abstract class for requester classes.
     """
+
     signal = blinker.Signal()
 
     @abc.abstractmethod
     def request(self) -> None:
         """ The requester method for making requests.
+
+        :returns: Does not return
+        :rtype: None
         """
 
         raise NotImplementedError()

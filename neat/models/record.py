@@ -43,6 +43,12 @@ class RecordPoint(object):
 
     @number.setter
     def number(self, number: int) -> None:
+        """ Sets the number of the record point.
+
+        :param number: The new number of the record point
+        :type number: int
+        """
+
         self._number = number
 
     @property
@@ -55,10 +61,16 @@ class RecordPoint(object):
 
     @name.setter
     def name(self, name: str) -> None:
+        """ Sets the name of the record point.
+
+        :param name: The new name of the record point
+        :type name: str
+        """
+
         self._name = name
 
     @property
-    def unit(self):
+    def unit(self) -> str:
         """ The pint unit expression of the record point.
         """
 
@@ -66,7 +78,13 @@ class RecordPoint(object):
             return self._unit
 
     @unit.setter
-    def unit(self, unit) -> None:
+    def unit(self, unit: str) -> None:
+        """ Sets the unit of the record point.
+
+        :param unit: The new pint unit expression of the record point
+        :type unit: str
+        """
+
         self._unit = unit
 
     @property
@@ -79,6 +97,12 @@ class RecordPoint(object):
 
     @value.setter
     def value(self, value: float) -> None:
+        """ Sets the value of the record point.
+
+        :param value: The new value of the record point
+        :type value: float
+        """
+
         self._value = value
 
     def to_dict(self) -> dict:

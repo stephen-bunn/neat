@@ -4,12 +4,13 @@
 # Copyright (c) 2017 Stephen Bunn (stephen@bunn.io)
 # GNU GPLv3 <https://www.gnu.org/licenses/gpl-3.0.en.html>
 
-import blinker
-import requests
 import urllib
 
 from .. import const
 from ._common import AbstractRequester
+
+import blinker
+import requests
 
 
 class ObviusRequester(AbstractRequester):
@@ -37,6 +38,8 @@ class ObviusRequester(AbstractRequester):
         :type obvius_port: int
         :param timeout: The request timeout period (10 seconds)
         :type timeout: int
+        :param kwargs: Any additional attributes for valid record creation
+        :type kwargs: dict
         """
 
         self._device_id = device_id
@@ -59,6 +62,9 @@ class ObviusRequester(AbstractRequester):
 
     def request(self) -> None:
         """ Request information from the obvius.
+
+        :returns: Does not return
+        :rtype: None
         """
 
         const.log.debug((
@@ -93,6 +99,8 @@ class ObviusRequester(AbstractRequester):
         :type args: list
         :param kwargs: Extra named arguments of the request
         :type kwargs: dict
+        :returns: Does not return
+        :rtype: None
         """
 
         if resp.status_code == 200:

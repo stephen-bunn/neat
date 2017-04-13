@@ -18,6 +18,9 @@ import dateutil.parser
 
 
 class ObviusTranslator(AbstractTranslator):
+    """ The translator for Obvius devices.
+    """
+
     supported_requesters = ('ObviusRequester',)
     _parser_pref = ['lxml', 'html.parser']
     _expression_unit_map = {
@@ -134,11 +137,17 @@ class ObviusTranslator(AbstractTranslator):
         'mmHg': 'mmHg',
     }
 
-    def __init__(self) -> None:
+    def __init__(self):
+        """ Initiaalizes the Obvius translator.
+        """
+
         self._unit_reg = pint.UnitRegistry(autoconvert_offset_to_baseunit=True)
 
     @property
     def parser(self) -> str:
+        """ The `xml` parser to use for parsing the returned requester content.
+        """
+
         if not hasattr(self, '_parser') or \
                 self._parser not in self._parser_pref:
             for parser in self._parser_pref:
@@ -149,6 +158,9 @@ class ObviusTranslator(AbstractTranslator):
 
     @property
     def unit_map(self) -> dict:
+        """ The mapping of Obvius units to valid pint units.
+        """
+
         if not hasattr(self, '_unit_map'):
             self._unit_map = {}
             for (k, v) in self._expression_unit_map.items():
@@ -156,12 +168,30 @@ class ObviusTranslator(AbstractTranslator):
         return self._unit_map
 
     def validate(self, data: str) -> bool:
+        """ Checks if the data from the Obvius is valid.
+
+        :param data: The data returned from a supported requester
+        :type data: str
+        :returns: True if the data is valid, otherwise False
+        :rtype: bool
+        """
+
         return int(
             bs4.BeautifulSoup(data, self.parser)
             .find('error').text
         ) == 0
 
     def translate(self, data: str, meta: dict={}) -> None:
+        """ Translates Obvius data to a record.
+
+        :param data: The xml returned from the Obvius endpoint
+        :type data: str
+        :param meta: Any additional data given to the requester
+        :type meta: dict
+        :returns: Does not return
+        :rtype: None
+        """
+
         if self.validate(data):
             soup = bs4.BeautifulSoup(data, self.parser)
             for device_record in soup.find_all('devices'):

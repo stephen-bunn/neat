@@ -16,11 +16,24 @@ import rethinkdb
 
 
 class RethinkDBPipe(AbstractPipe):
+    """ A record pipe for RethinkDB.
 
-    def __init__(
-        self, ip: str, port: int, table: str,
-        clean_delay: int=300
-    ):
+    .. note:: Records are always placed in the `neat` table.
+    """
+
+    def __init__(self, ip: str, port: int, table: str, clean_delay: int=300):
+        """ Initializes the RethinkDB pipe.
+
+        :param ip: The IP of the RethinkDB instance
+        :type ip: str
+        :param port: The port of the RethinkDB instance
+        :type port: int
+        :param table: The table name of the table to place records into
+        :type table: str
+        :param clean_delay: Seconds between cleaning dead records
+        :type clean_delay: int
+        """
+
         (self._ip, self._port) = (ip, port)
         self._table_name = table
         (self._last_cleaned, self._clean_delay) = (0, clean_delay)
@@ -42,12 +55,23 @@ class RethinkDBPipe(AbstractPipe):
         self._cleaning_thread.start()
 
     def __repr__(self):
+        """ A string representation of the pipe.
+
+        :returns: A string representation of the pipe
+        :rtype: str
+        """
+
         return ((
             '<{self.__class__.__name__} ({self._ip}:{self._port})>'
         ).format(self=self))
 
     @property
     def connection(self):
+        """ The client attached to the RethinkDB uri.
+
+        .. warning:: RethinkDB driver connections are not thread safe
+        """
+
         # NOTE: unfortunately rethinkdb driver connections are not thread safe
         # For this reason, a new connection must be initalized on each request
         try:
@@ -68,11 +92,27 @@ class RethinkDBPipe(AbstractPipe):
             raise exc
 
     def _cleaning_scheduler(self, delay: float) -> None:
+        """ Waits for a couple seconds before cleaning.
+
+        :param delay: The number of seconds to wait before cleaning
+        :type delay: float
+        :returns: Does not return
+        :rtype: None
+        """
+
         while True:
             self.clean()
             time.sleep(delay)
 
     def accept(self, record: Record) -> None:
+        """ Accepts a record to be placed into the RethinkDB instance.
+
+        :param record: The record to be placed into the RethinkDB instance
+        :type record: Record
+        :returns: Does not return
+        :rtype: None
+        """
+
         const.log.debug((
             'commiting `{record}` records into `{self}` ...'
         ).format(self=self, record=record))
@@ -80,6 +120,12 @@ class RethinkDBPipe(AbstractPipe):
         self.signal.send(self, record=record)
 
     def clean(self) -> None:
+        """ Cleans dead records from the RethinkDB instance.
+
+        :returns: Does not return
+        :rtype: None
+        """
+
         const.log.debug((
             'cleaning expired records from `{self.table}` ...'
         ).format(self=self))
@@ -93,6 +139,12 @@ class RethinkDBPipe(AbstractPipe):
         return deletion_results['deleted']
 
     def validate(self) -> bool:
+        """ Self validates the RethinkDB pipe.
+
+        :returns: True if the pipe is valid, otherwise False
+        :rtype: bool
+        """
+
         try:
             self.connection
             return True

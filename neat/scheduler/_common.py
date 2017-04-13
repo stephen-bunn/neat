@@ -11,14 +11,15 @@ import blinker
 
 
 class AbstractScheduler(multiprocessing.Process, metaclass=abc.ABCMeta):
-    """ The abstract scheduler which all schedulers much extend.
+    """ The base scheduler for all valid schedulers.
+
+    .. note:: Required, that all subclasses call super initialization
     """
+
     signal = blinker.Signal()
 
     def __init__(self):
         """ The abstract scheduler initializer.
-
-        ..note: Required that all subclasses super initialization
         """
 
         super().__init__()
@@ -26,6 +27,9 @@ class AbstractScheduler(multiprocessing.Process, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def run(self) -> None:
         """ The infinite method to start sending signals on scheduled delays.
+
+        :returns: Does not return
+        :rtype: None
         """
 
         raise NotImplementedError()

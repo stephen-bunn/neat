@@ -9,6 +9,7 @@ Welcome to NEAT's documentation!
 
   introductions
   getting-started
+  architecture
   neat
 
 

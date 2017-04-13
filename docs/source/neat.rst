@@ -1,6 +1,20 @@
 NEAT Package
 ============
 
+Module contents
+---------------
+
+.. automodule:: neat
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :synopsis: A communication framework for REI devices and database systems
+    :platform: Unix
+.. moduleauthor:: Stephen Bunn <stephen@bunn.io>
+.. moduleauthor:: Sierra Milosh <miloshsr1@appstate.edu>
+.. moduleauthor:: Nathan Davis <davisna1@appstate.edu>
+.. moduleauthor:: James Ward <wardja2@appstate.edu>
+
 Subpackages
 -----------
 
@@ -46,17 +60,3 @@ neat\.device module
     :members:
     :undoc-members:
     :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: neat
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :synopsis: A communication framework for REI devices and database systems
-    :platform: Unix
-.. moduleauthor:: Stephen Bunn <stephen@bunn.io>
-.. moduleauthor:: Sierra Milosh <miloshsr1@appstate.edu>
-.. moduleauthor:: Nathan Davis <davisna1@appstate.edu>
-.. moduleauthor:: James Ward <wardja2@appstate.edu>

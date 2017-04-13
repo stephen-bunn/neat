@@ -12,6 +12,8 @@ from ._common import AbstractScheduler
 
 class SimpleDelayScheduler(AbstractScheduler):
     """ The scheduler for simple requesters.
+
+    .. note:: Required, that all subclasses call super initialization
     """
 
     def __init__(self, delay: float=1.0):
@@ -44,15 +46,18 @@ class SimpleDelayScheduler(AbstractScheduler):
 
     @delay.setter
     def delay(self, delay: float) -> None:
-        """ Allows the user to modify the scheduler delay.
+        """ Sets the scheduler's delay.
 
         :param delay: The new delay of the scheduler
         :type delay: float
         """
         self._delay = float(delay)
 
-    def run(self):
+    def run(self) -> None:
         """ Starts the infinite loop for signaling scheduled requests.
+
+        :returns: Does not return
+        :rtype: None
         """
 
         self.daemon = True

@@ -14,19 +14,48 @@ import pymongo
 
 
 class MongoDBPipe(AbstractPipe):
+    """ A record pipe for MongoDB.
+
+    .. note:: Records are always placed in the `neat` table.
+    """
 
     def __init__(self, ip: str, port: int, table: str, entry_delay: int=600):
+        """ Initializes the MongoDB pipe.
+
+        :param ip: The IP of the MongoDB instance
+        :type ip: str
+        :param port: The port of the MongoDB instance
+        :type port: int
+        :param table: The table name of the table to place records into
+        :type table: str
+        :param entry_delay: Seconds between allowing records into the database
+        :type entry_delay: int
+        """
+
         (self._ip, self._port) = (ip, port)
         self._table_name = table
         (self._entry_register, self._entry_delay) = ({}, entry_delay)
 
     def __repr__(self):
+        """ A string representation of the pipe.
+
+        :returns: A string representation of the pipe
+        :rtype: str
+        """
+
         return ((
             '<{self.__class__.__name__} ({self._ip}:{self._port})>'
         ).format(self=self))
 
     @property
     def client(self) -> pymongo.MongoClient:
+        """ The client attached to the MongoDB uri.
+
+        .. warning:: MongoDB driver connections are not fork safe
+        """
+
+        # NOTE: since mongodb driver connections are not fork safe, setting
+        # connect to False is required
         if not hasattr(self, '_client'):
             try:
                 self._client = pymongo.MongoClient(
@@ -42,17 +71,31 @@ class MongoDBPipe(AbstractPipe):
 
     @property
     def db(self):
+        """ The database of the client to write to.
+        """
+
         if not hasattr(self, '_db'):
             self._db = self.client[const.module_name]
         return self._db
 
     @property
     def table(self):
+        """ The table of the database to write to.
+        """
+
         if not hasattr(self, '_table'):
             self._table = self.db.collection[self._table_name]
         return self._table
 
     def accept(self, record: Record) -> None:
+        """ Accepts a record to be placed into the MongoDB instance.
+
+        :param record: The record to be placed in the MongoDB instance
+        :type record: Record
+        :returns: Does not return
+        :rtype: None
+        """
+
         const.log.debug((
             'handling `{record}` with `{self}` ...'
         ).format(self=self, record=record))
@@ -84,6 +127,12 @@ class MongoDBPipe(AbstractPipe):
         self.signal.send(self, record=record)
 
     def validate(self) -> bool:
+        """ Self validates the MongoDB pipe.
+
+        :returns: True if the pipe is valid, otherwise False
+        :rtype: bool
+        """
+
         try:
             self.client
             return True

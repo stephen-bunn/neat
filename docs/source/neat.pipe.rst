@@ -1,6 +1,14 @@
 neat\.pipe package
 ==================
 
+Module contents
+---------------
+
+.. automodule:: neat.pipe
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Submodules
 ----------
 
@@ -16,15 +24,6 @@ neat\.pipe\.rethinkdb module
 ----------------------------
 
 .. automodule:: neat.pipe.rethinkdb
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: neat.pipe
     :members:
     :undoc-members:
     :show-inheritance:
