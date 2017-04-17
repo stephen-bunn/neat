@@ -55,13 +55,19 @@ class AbstractDevice(object, metaclass=abc.ABCMeta):
                 not isinstance(self, UnknownDevice):
             for (parsed_name, parsed_config) in record.parsed.items():
                 record_point = record.data[parsed_config['point']]
-                parsed_point = (self.ureg.Quantity(
-                    record_point.value, self.ureg.Unit(record_point.unit)
-                )).to(self.ureg.Unit(self.fields[parsed_name]))
-                record_parsed[parsed_name] = RecordPoint(
-                    value=parsed_point.magnitude,
-                    unit=str(parsed_point.units)
-                )
+                try:
+                    parsed_point = (self.ureg.Quantity(
+                        record_point.value, self.ureg.Unit(record_point.unit)
+                    )).to(self.ureg.Unit(self.fields[parsed_name]))
+                    record_parsed[parsed_name] = RecordPoint(
+                        value=parsed_point.magnitude,
+                        unit=str(parsed_point.units)
+                    )
+                except KeyError as exc:
+                    const.log.warning((
+                        '`{record}` got unkown specification for a field '
+                        '`{parsed_name}`, ignoring ...'
+                    ).format(record=record, parsed_name=parsed_name))
             for (req_name, req_unit) in self.fields.items():
                 try:
                     record_parsed[req_name]
@@ -91,6 +97,7 @@ class PVDevice(AbstractDevice):
     """
 
     name = 'PV Device'
+    # TODO: determine default types for device
     fields = {}
 
 
@@ -99,6 +106,7 @@ class HVACDevice(AbstractDevice):
     """
 
     name = 'HVAC Device'
+    # TODO: determine default types for device
     fields = {}
 
 
@@ -134,6 +142,7 @@ class EnergyDevice(AbstractDevice):
     """
 
     name = 'Energy Device'
+    # TODO: determine default types for device
     fields = {}
 
 
@@ -142,6 +151,7 @@ class TemperatureDevice(AbstractDevice):
     """
 
     name = 'Temperature Device'
+    # TODO: determine default types for device
     fields = {}
 
 

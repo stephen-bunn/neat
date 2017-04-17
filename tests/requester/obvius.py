@@ -64,10 +64,9 @@ class ObviusRequesterTest(unittest.TestCase):
 
         with requests_mock.mock() as mock:
             mock.get(self._req_url, text='data')
-            self.assertIsNone(self._req.request())
 
             self._req.signal.send = MagicMock()
-            self._req.request()
+            self.assertIsNone(self._req.request())
             self._req.signal.send.assert_called_with(
                 self._req,
                 data='data', meta={'test': 'meta'}

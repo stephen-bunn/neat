@@ -306,6 +306,12 @@ class Record(AbstractModel):
 
     @parsed.setter
     def parsed(self, parsed: Dict[str, RecordPoint]) -> None:
+        """ Sets the parsed data points.
+
+        :param parsed: A dictionary of the parsed data points
+        :type parsed: dict
+        """
+
         self._parsed = parsed
 
     def validate(self) -> bool:
