@@ -54,7 +54,7 @@ class AbstractDevice(object, metaclass=abc.ABCMeta):
         if isinstance(record.parsed, dict) and \
                 not isinstance(self, UnknownDevice):
             for (parsed_name, parsed_config) in record.parsed.items():
-                record_point = record.data[parsed_config['number']]
+                record_point = record.data[parsed_config['point']]
                 parsed_point = (self.ureg.Quantity(
                     record_point.value, self.ureg.Unit(record_point.unit)
                 )).to(self.ureg.Unit(self.fields[parsed_name]))

@@ -55,24 +55,28 @@ This object specifies the ``to_dict`` method which compresses the useful object 
 .. code-block:: json
 
   {
-    "name": "primary.key",
-    "device_name": "human readable non-unique",
+    "meta": {},
+    "name": "primary key unique name",
+    "device_name": "human readable non-unique name",
     "type": "DEVICE_TYPE",
-    "timestamp": 0123456789,
+    "timestamp": 1234567890,
     "coord": {
       "lon": 123.456789,
       "lat": -123.456789
     },
-    "data": [{
-      "name": "unreliable-name",
-      "value": 12.3456789,
-      "units": "PINT_UNIT"
-    }],
-    "parsed": [{
-      "name": "reliable-name",
-      "value": 12.3456789,
-      "unit": "PINT_UNIT"
-    }]
+    "data": {
+      "0": {
+        "name": "unreliable-name",
+        "value": 12.3456789,
+        "units": "PINT_UNIT"
+      }
+    },
+    "parsed": {
+      "reliable-name": {
+        "value": 12.3456789,
+        "unit": "PINT_UNIT"
+      }
+    }
   }
 
 
@@ -183,6 +187,18 @@ Valid concrete translators must extend from ``AbstractTranslator`` as usual.
 
 Note the engine lazily instantiates the translators only when they are required.
 Therefore, initialization parameters to concrete translators is currently not supported in the neat engine.
+
+Device Types
+------------
+
+The purpose of a device type is to ensure that the data comming in from multiple different types of devices from multiple requesters can have their points generalized into the ``parsed`` field of a :class:`~neat.models.record.Record`.
+The allowed device types are stored in the ``device.py`` and are encapsulated within the :class:`~neat.device.DeviceType` enumeration along with a unique hexadecimal id and an instance to the device.
+Correct parsing of the data fields currently relies on the ``parsed`` fields contained within the ``config.yml``.
+With the addition of new device types and different requesters that do no utilize the Obvius' device points, it may be neccessary to change the logic of the :func:`~neat.device.AbstractDevice.parse` function.
+
+The :func:`~neat.device.AbstractDevice.parse` function takes the populated data fields along with the ``parsed`` config configuration to determine what attributes of the record's ``data`` to load and convert to a uniform `pint <https://pint.readthedocs.io/en/0.7.2/>`_ unit.
+This information is the placed within the ``parsed`` dictionary of the :class:`~neat.models.record.Record` which can then be serialized for the pipe's usage.
+
 
 Pipes
 -----

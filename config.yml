@@ -28,158 +28,17 @@ devices:
       ttl:         300
       parsed:
         energy_total:
-          number: 5
-          unit: btu
+          point: 5
+          unit:  btu
         energy_rate:
-          number: 0
-          unit: btu / hour
+          point: 0
+          unit:  btu / hour
         flow_rate:
-          number: 1
-          unit: gallon / minute
+          point: 1
+          unit:  gallon / minute
         supply_temp:
-          number: 3
-          unit: degF
+          point: 3
+          unit:  degF
         return_temp:
-          number: 4
-          unit: degF
-
-  # - scheduler:
-  #     $:           SimpleDelayScheduler
-  #     delay:       10.0
-  #   requester:
-  #     $:           ObviusRequester
-  #     device_id:   17
-  #     obvius_ip:   152.10.6.240
-  #     obvius_port: 80
-  #     obvius_user: user
-  #     obvius_pass: ASUREI
-  #     name:        flow.2
-  #     type:        FLOW
-  #     lat:         -12.3
-  #     lon:         12.3
-  #     ttl:         300
-  #
-  # - scheduler:
-  #     $:           SimpleDelayScheduler
-  #     delay:       10.0
-  #   requester:
-  #     $:           ObviusRequester
-  #     device_id:   19
-  #     obvius_ip:   152.10.6.240
-  #     obvius_port: 80
-  #     obvius_user: user
-  #     obvius_pass: ASUREI
-  #     name:        flow.3
-  #     type:        FLOW
-  #     lat:         -12.3
-  #     lon:         12.3
-  #     ttl:         300
-  #
-  # - scheduler:
-  #     $:           SimpleDelayScheduler
-  #     delay:       10.0
-  #   requester:
-  #     $:           ObviusRequester
-  #     device_id:   21
-  #     obvius_ip:   152.10.6.240
-  #     obvius_port: 80
-  #     obvius_user: user
-  #     obvius_pass: ASUREI
-  #     name:        flow.4
-  #     type:        FLOW
-  #     lat:         -12.3
-  #     lon:         12.3
-  #     ttl:         300
-  #
-  # - scheduler:
-  #     $:           SimpleDelayScheduler
-  #     delay:       10.0
-  #   requester:
-  #     $:           ObviusRequester
-  #     device_id:   51
-  #     obvius_ip:   152.10.6.240
-  #     obvius_port: 80
-  #     obvius_user: user
-  #     obvius_pass: ASUREI
-  #     name:        pv.1
-  #     type:        PV
-  #     lat:         -12.3
-  #     lon:         12.3
-  #     ttl:         300
-  #
-  # - scheduler:
-  #     $:           SimpleDelayScheduler
-  #     delay:       10.0
-  #   requester:
-  #     $:           ObviusRequester
-  #     device_id:   101
-  #     obvius_ip:   152.10.6.240
-  #     obvius_port: 80
-  #     obvius_user: user
-  #     obvius_pass: ASUREI
-  #     name:        energy.1
-  #     type:        ENERGY
-  #     lat:         -12.3
-  #     lon:         12.3
-  #     ttl:         300
-  #
-  # - scheduler:
-  #     $:           SimpleDelayScheduler
-  #     delay:       10.0
-  #   requester:
-  #     $:           ObviusRequester
-  #     device_id:   117
-  #     obvius_ip:   152.10.6.240
-  #     obvius_port: 80
-  #     obvius_user: user
-  #     obvius_pass: ASUREI
-  #     name:        solar_therm.1
-  #     type:        SOLAR_THERM
-  #     lat:         -12.3
-  #     lon:         12.3
-  #     ttl:         300
-  #
-  # - scheduler:
-  #     $:           SimpleDelayScheduler
-  #     delay:       10.0
-  #   requester:
-  #     $:           ObviusRequester
-  #     device_id:   118
-  #     obvius_ip:   152.10.6.240
-  #     obvius_port: 80
-  #     obvius_user: user
-  #     obvius_pass: ASUREI
-  #     name:        solar_therm.2
-  #     type:        SOLAR_THERM
-  #     lat:         -12.3
-  #     lon:         12.3
-  #
-  # - scheduler:
-  #     $:           SimpleDelayScheduler
-  #     delay:       10.0
-  #   requester:
-  #     $:           ObviusRequester
-  #     device_id:   119
-  #     obvius_ip:   152.10.6.240
-  #     obvius_port: 80
-  #     obvius_user: user
-  #     obvius_pass: ASUREI
-  #     name:        solar_therm.3
-  #     type:        SOLAR_THERM
-  #     lat:         -12.3
-  #     lon:         12.3
-  #
-  # - scheduler:
-  #     $:           SimpleDelayScheduler
-  #     delay:       10.0
-  #   requester:
-  #     $:           ObviusRequester
-  #     device_id:   121
-  #     obvius_ip:   152.10.6.240
-  #     obvius_port: 80
-  #     obvius_user: user
-  #     obvius_pass: ASUREI
-  #     name:        solar_therm.4
-  #     type:        SOLAR_THERM
-  #     lat:         -12.3
-  #     lon:         12.3
+          point: 4
+          unit:  degF

@@ -2,8 +2,8 @@ Introductions
 =============
 
 :Authors:
-  Stephen Bunn,
   Sierra Milosh,
+  Stephen Bunn,
   Nathan Davis,
   James Ward
 
