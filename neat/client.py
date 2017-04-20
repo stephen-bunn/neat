@@ -59,23 +59,58 @@ class BasicClient(AbstractClient):
 
         device_pairs = []
         pipers = []
-        for device in config['devices']:
-            device_scheduler = getattr(scheduler, device['scheduler']['$'])(**{
-                k: v
-                for (k, v) in device['scheduler'].items()
-                if k != '$'
-            })
-            device_requester = getattr(requester, device['requester']['$'])(**{
-                k: v
-                for (k, v) in device['requester'].items()
-                if k != '$'
-            })
-            device_pairs.append((device_scheduler, device_requester))
+        for (device_index, device) in enumerate(config['devices']):
+            device_setup = []
+            try:
+                device_scheduler_config = {
+                    k: v
+                    for (k, v) in device['scheduler'].items()
+                    if k != '$'
+                }
+                device_setup.append(getattr(
+                    scheduler, device['scheduler']['$']
+                )(**device_scheduler_config))
+            except Exception as exc:
+                const.log.error((
+                    'could not initialize scheduler '
+                    'for device at index `{device_index}` with config '
+                    '{device_scheduler_config} ...'
+                ).format(
+                    device_index=device_index,
+                    device_scheduler_config=device_scheduler_config
+                ))
+            try:
+                device_requester_config = {
+                    k: v
+                    for (k, v) in device['requester'].items()
+                    if k != '$'
+                }
+                device_setup.append(getattr(
+                    requester, device['requester']['$']
+                )(**device_requester_config))
+            except Exception as exc:
+                const.log.error((
+                    'could not initialize requester for device at index '
+                    '`{device_index}` with config '
+                    '{device_requester_config} ...'
+                ).format(
+                    device_index=device_index,
+                    device_requester_config=device_requester_config
+                ))
+            if len(device_setup) == 2:
+                device_pairs.append(tuple(device_setup))
         for piper in config['pipes']:
-            piper = getattr(pipe, piper['$'])(**{
-                k: v for (k, v) in piper.items() if k != '$'
-            })
-            pipers.append(piper)
+            try:
+                piper_config = {
+                    k: v for (k, v) in piper.items() if k != '$'
+                }
+                piper = getattr(pipe, piper['$'])(**piper_config)
+                pipers.append(piper)
+            except Exception as exc:
+                const.log.error((
+                    'could not initialize pipe `{piper[$]}` with config '
+                    '{piper_config} ...'
+                ).format(piper=piper, piper_config=piper_config))
         self.engine = Engine(dict(device_pairs), pipers)
 
     @staticmethod
