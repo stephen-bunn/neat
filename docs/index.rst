@@ -1,6 +1,6 @@
 .. NEAT documentation master file
 
-Welcome to NEAT's documentation!
+Appstate NEAT
 ================================
 
 .. toctree::
