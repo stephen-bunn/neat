@@ -4,6 +4,7 @@ _Appstate's networked energy appliance translator (NEAT)._
 [![Build Status](https://travis-ci.org/ritashugisha/neat.svg?branch=master)](https://travis-ci.org/ritashugisha/neat)
 [![codecov](https://codecov.io/gh/ritashugisha/neat/branch/master/graph/badge.svg)](https://codecov.io/gh/ritashugisha/neat)
 [![Requirements Status](https://requires.io/github/ritashugisha/neat/requirements.svg?branch=master)](https://requires.io/github/ritashugisha/neat/requirements/?branch=master)
+[![Documentation Status](https://readthedocs.org/projects/appstate-neat/badge/?version=latest)](http://appstate-neat.readthedocs.io/en/latest/?badge=latest)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 
@@ -55,7 +56,6 @@ The following people are _listed_ contributors of this project.
 - Nathan Davis <[Kanthalon](https://github.com/Kanthalon)> ([davisna1@appstate.edu](mailto:davisna1@appstate.edu))
 - James Ward <[thehunte199](https://github.com/thehunte199)> ([wardja2@appstate.edu](mailto:wardja2@appstate.edu))
 
- 
+
 
 [^1]: http://appalachianmagazine.org/stories/id/683
-
