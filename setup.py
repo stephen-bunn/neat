@@ -21,12 +21,8 @@ setup(
     platforms='Unix',
     include_package_data=True,
     install_requires=[
-        'sphinx>=1.5.2',
-        'nose>=1.3.7',
-        'coverage>=4.3.4',
         'jsonschema>=2.6.0',
         'requests>=2.13.0',
-        'requests-mock>=1.3.0',
         'blinker>=1.4',
         'pint>=0.7.2',
         'lxml>=3.4.2',
