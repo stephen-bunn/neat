@@ -82,7 +82,7 @@ This object specifies the ``to_dict`` method which compresses the useful object 
 
 This top-level json object is built from the :class:`~neat.models.record.Record` object in ``models/record.py``.
 The shorter json objects in the data and parsed fields are built from the :class:`~neat.models.record.RecordPoint` object also in ``models/record.py``.
-It's easy to see that the record point stores information about a data point such as the name, value, and an understandable unit expression from the `pint <https://pint.readthedocs.io/en/0.7.2/>`_ module's vanilla unit registry.
+It's easy to see that the record point stores information about a data point such as the name, value, and an understandable unit expression from the `pint <https://pint.readthedocs.io/>`_ module's vanilla unit registry.
 
 Engine
 ------
