@@ -2,6 +2,7 @@
 
 Appstate NEAT
 ================================
+Appalachian State University's networked energy appliance translator
 
 .. toctree::
   :maxdepth: 2

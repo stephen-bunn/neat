@@ -2,6 +2,8 @@
 Getting Started
 ===============
 
+.. _getting_started-developers:
+
 Developers
 ----------
 The following subsections detail what is required for various tasks during development.
@@ -70,7 +72,7 @@ Testing Conventions
 NEAT tests are written using Python's standard `unittest <https://docs.python.org/3.6/library/unittest.html>`_ module.
 However, tests are executed via the `nose <https://nose.readthedocs.io/en/latest/>`_ framework.
 
-Unittests for ``neat`` require both `nose <http://nose.readthedocs.io/en/latest/>`_ and `codecov <https://pypi.python.org/pypi/codecov>`_.
+Unittests for ``neat`` require both nose and `codecov <https://pypi.python.org/pypi/codecov>`_.
 These packages are not listed
 Tests should be run from the root directory of the repository using the following command:
 ::
@@ -81,6 +83,50 @@ The ``.coveragerc`` file defines what folders to run tests for and what files to
 
 We use a continuous integration system, `TravisCI <https://travis-ci.org/>`_, to continually check test cases on public pushes to the GitHub repository.
 We also utilize codecov, which presents code coverage as reported by TravisCI after each public push. The configuration for continuous integration can be found in the standard ``.travis.yml`` file, found in the root of the repository.
+
+Logging Conventions
+~~~~~~~~~~~~~~~~~~~
+Logging is enabled by default and runs on the :class:`logging.Logger` ``DEBUG`` level.
+The default logging format is:
+::
+
+  %(asctime)s - %(levelname)s - %(filename)s:%(lineno)s<%(funcName)s> %(message)s
+
+The ``neat`` framework also comes with a custom logging exception handler which logs exceptions.
+All of these logging properties can be modified by changing the values of the ``neat`` constants:
+
+.. code-block:: python
+
+  import logging
+  import neat
+
+  # log any exceptions that occur
+  neat.const.log_exceptions = True
+
+  # update the logging level so just INFO and greater logs are displayed
+  neat.const.log_level = logging.INFO
+
+  # update the logging format so just the message is displayed
+  neat.const.log_format = '%(message)s'
+
+Logs are stored on ``stdout`` as well as stored in a rotating file handler.
+A certain days logs are stored under the ``/logs/{year}/{month}`` directory in the ``{month}{day}{year}.log`` files.
+For example, the following log file path is for logs created on April 1, 2017:
+::
+
+  /logs/2017/4/04012017.log
+
+Log files are split every ``1024 * 1024`` bytes.
+
+* Logs should primarily relay information about signal calls, and record transforms on the ``DEBUG`` level via ``logging.debug('...')``.
+* Any information about pipe connection status or general startup/shutdown information should be on the ``INFO`` level via ``logging.info('...')``.
+* Invalid input, data, configuration that doesn't cause the runtime to crash should be on the ``WARNING`` level via ``logging.warning('...')``.
+* Any invalid state or unexpected error that causes the runtime to skip over some important logic should be on the ``ERROR`` level via ``logging.error('...')``.
+* Any state causing the framework to crash should be on the ``CRITICAL`` level via ``logging.critical('...')``.
+* Finally, any caught exceptions that are used as quick fixes to errors should be logged on the ``EXCEPTION`` level via ``log.exception('...')``.
+
+Log lines typically also have ``...`` appended to the end in order to accomodate external logging parsers.
+This line ending is separated from the message of the log line by a space.
 
 Installing Dependencies
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -130,6 +176,23 @@ In order for the pipes to function correctly, the servers for a pipe's database 
 * `RethinkDB <https://www.rethinkdb.com/docs/install/>`_ for the :class:`~neat.pipe.rethinkdb.RethinkDBPipe`
 * `MongoDB <https://www.mongodb.com/download-center?jmp=nav>`_ for the :class:`~neat.pipe.mongodb.MongoDBPipe`
 
+
+Contributing
+------------
+The following subsections are for people who wish to contribute to the ``neat`` framework.
+We assume that if you want to contribute, you will abide by the standards discussed in :ref:`getting_started-developers`.
+
+Issues
+~~~~~~
+Best issues are a `short, self contained, correct example <http://sscce.org>`_ of the problem.
+Providing logs for when the error occured is also very helpful.
+
+Pull Requests
+~~~~~~~~~~~~~
+All pull requests must be done on the `dev <https://github.com/ritashugisha/neat/tree/dev>`_ branch.
+Pull requests on the ``master`` branch should be ignored
+
+
 Extending NEAT
 --------------
 The following subsections detail tasks required for extending the ``neat`` framework.
@@ -170,3 +233,10 @@ Logging and other configuration can be done by editing the constants before star
 
   neat.const.log_exceptions = True
   neat.const.log_level = logging.DEBUG
+
+In order for pipes to function correctly, the client servers for the desired pipes must be started before running the ``neat`` client.
+This can be done by starting the RethinkDB and MongoDB pipes in a separate process like the following:
+::
+
+  rethinkdb -d /path/to/rethinkdb/storage/directory
+  mongodb --dp-path=/path/to/mongodb/storage/directory

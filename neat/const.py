@@ -9,6 +9,7 @@ import sys
 import json
 import logging
 import logging.handlers
+import warnings
 import datetime
 
 
@@ -51,6 +52,11 @@ class _const(object):
     def __init__(self):
         """ Constants initializer.
         """
+
+        if os.name != 'posix':
+            warnings.warn((
+                '{self.module_name} is running on an unsupported system'
+            ).format(self=self), UserWarning)
 
         self._log_exceptions = False
         self._log_level = logging.DEBUG
