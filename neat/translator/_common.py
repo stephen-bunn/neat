@@ -15,13 +15,14 @@ class AbstractTranslator(object, metaclass=abc.ABCMeta):
     """
 
     signal = blinker.Signal()
+    supported_requesters = ()
 
-    @abc.abstractproperty
-    def supported_requesters(self) -> Tuple[str]:
-        """ A list of supported requester's class names.
-        """
-
-        raise NotImplementedError()
+    # @abc.abstractproperty
+    # def supported_requesters(self) -> Tuple[str]:
+    #     """ A list of supported requester's class names.
+    #     """
+    #
+    #     raise NotImplementedError()
 
     @abc.abstractmethod
     def validate(self, data: str) -> bool:
