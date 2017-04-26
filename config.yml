@@ -23,8 +23,8 @@ devices:
       obvius_pass: ASUREI
       name:        solar_therm.1
       type:        SOLAR_THERM
-      lat:         -12.3
-      lon:         12.3
+      lat:         -81.680414
+      lon:         36.213306
       ttl:         300
       parsed:
         energy_total:
