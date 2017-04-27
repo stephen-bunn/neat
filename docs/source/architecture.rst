@@ -196,7 +196,7 @@ The allowed device types are stored in the ``device.py`` and are encapsulated wi
 Correct parsing of the data fields currently relies on the ``parsed`` fields contained within the ``config.yml``.
 With the addition of new device types and different requesters that do no utilize the Obvius' device points, it may be neccessary to change the logic of the :func:`~neat.device.AbstractDevice.parse` function.
 
-The :func:`~neat.device.AbstractDevice.parse` function takes the populated data fields along with the ``parsed`` config configuration to determine what attributes of the record's ``data`` to load and convert to a uniform `pint <https://pint.readthedocs.io/en/0.7.2/>`_ unit.
+The :func:`~neat.device.AbstractDevice.parse` function takes the populated data fields along with the ``parsed`` config configuration to determine what attributes of the record's ``data`` to load and convert to a uniform pint unit.
 This information is the placed within the ``parsed`` dictionary of the :class:`~neat.models.record.Record` which can then be serialized for the pipe's usage.
 
 
