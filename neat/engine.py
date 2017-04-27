@@ -132,6 +132,7 @@ class Engine(object):
         :returns: Does not return
         :rtype: None
         """
+
         const.log.debug((
             'pipe `{piper}` successfully handled record `{record}` ...'
         ).format(piper=piper, record=record))

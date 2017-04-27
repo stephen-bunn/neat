@@ -18,7 +18,7 @@ class _const(object):
     """
 
     _module_name = 'neat'
-    _version = {'major': 0, 'minor': 0, 'patch': 0}
+    _version = {'major': 1, 'minor': 0, 'patch': 0}
     _authors = (
         'Stephen Bunn <stephen@bunn.io>',
         'Sierra Milosh <miloshsr1@appstate.edu>',
@@ -138,20 +138,6 @@ class _const(object):
         """
 
         return os.path.dirname(self.base_dir)
-
-    @property
-    def record_backup_dir(self) -> str:
-        """ The directory in which to store record backups on engine exit.
-        """
-
-        return os.path.join(os.path.dirname(base_dir), 'record_backup')
-
-    @property
-    def record_backup_store(self) -> str:
-        """ The file in which to store previous execution incomplete records.
-        """
-
-        return os.path.join(self.record_backup_dir, 'backup.json')
 
     @property
     def schema_dir(self) -> str:
