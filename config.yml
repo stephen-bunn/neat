@@ -5,40 +5,37 @@ pipes:
     port:        28015
     table:       devices
     clean_delay: 300
-  - $:           MongoDBPipe
-    ip:          localhost
-    port:        27017
-    table:       devices
-    entry_delay: 100
+  # - $:           MongoDBPipe
+  #   ip:          localhost
+  #   port:        27017
+  #   table:       devices
+  #   entry_delay: 100
 devices:
   - scheduler:
       $:           SimpleDelayScheduler
       delay:       10.0
     requester:
       $:           ObviusRequester
-      device_id:   18
+      device_id:   4
       obvius_ip:   152.10.6.240
       obvius_port: 80
       obvius_user: user
       obvius_pass: ASUREI
-      name:        solar_therm.1
-      type:        SOLAR_THERM
+      name:        wind.1
+      type:        WIND
       lat:         -81.680414
       lon:         36.213306
       ttl:         300
       parsed:
-        energy_total:
-          point: 5
-          unit:  btu
-        energy_rate:
-          point: 0
-          unit:  btu / hour
-        flow_rate:
+        inverter_real:
           point: 1
-          unit:  gallon / minute
-        supply_temp:
-          point: 3
-          unit:  degF
-        return_temp:
-          point: 4
-          unit:  degF
+          unit:  kilowatt
+        inverter_energy_total:
+          point: 11
+          unit:  kilowatthour
+        rotor_speed:
+          point: 10
+          unit:  rpm
+        wind_speed:
+          point: 14
+          unit:  mph
