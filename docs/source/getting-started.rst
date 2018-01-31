@@ -176,6 +176,14 @@ In order for the pipes to function correctly, the servers for a pipe's database 
 * `RethinkDB <https://www.rethinkdb.com/docs/install/>`_ for the :class:`~neat.pipe.rethinkdb.RethinkDBPipe`
 * `MongoDB <https://www.mongodb.com/download-center?jmp=nav>`_ for the :class:`~neat.pipe.mongodb.MongoDBPipe`
 
+Building
+~~~~~~~~
+The ``neat`` project's setup script allows the building and installation of the ``neat`` framework as a dependency into a virtual envrionment.
+The project can be built or executed using either of the following commands:
+::
+
+  python setup.py build   # builds the project and egg info
+  python setup.py install # installs the built project to the current environment
 
 Contributing
 ------------

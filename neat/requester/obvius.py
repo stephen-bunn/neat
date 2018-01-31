@@ -84,7 +84,10 @@ class ObviusRequester(AbstractRequester):
                 hooks=dict(response=self.receive),
                 timeout=self._timeout
             )
-        except requests.exceptions.ConnectTimeout as exc:
+        except (
+            requests.exceptions.ConnectTimeout,
+            requests.exceptions.ConnectionError
+        ) as exc:
             const.log.error((
                 'connection timeout occured after `{self._timeout}` seconds '
                 'for device `{self._device_id}` at `{self._obvius_ip}` ...'
