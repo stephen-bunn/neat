@@ -13,23 +13,6 @@ Who We Are
 We are two senior and two graduate level students at Appalachian State University under the SSTEM NSF funded scholarship. Each semester, we get to choose a research project to work on with other students from the SSTEM program. This semester, we chose to help create a dashboard for a student-run, student-funded group on campus called the Renewable Energy Initiaitve.
 
 
-.. image:: _static/img/sierra-milosh.jpg
-  :width: 20%
-  :alt: Sierra Milosh
-
-.. image:: _static/img/stephen-bunn.jpg
-  :width: 20%
-  :alt: Stephen Bunn
-
-.. image:: _static/img/nathan-davis.jpg
-  :width: 20%
-  :alt: Nathan Davis
-
-.. image:: _static/img/james-ward.jpg
-  :width: 20%
-  :alt: James Ward
-
-
 Why We're Doing This Project
 ----------------------------
 The Renewable Energy Initiative at Appalachian State University gets a $5, self-imposed fee from each student per semester to put towards renewable energy systems on campus. Recently, the REI passed a referendum that required each new project proposal include in the plan and budget a data monitoring system.
